@@ -308,6 +308,31 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
   #opening{transition:none}
 }
 
+
+/* V3.5 — fotografía final aprobada */
+.photo-frame{
+  background:#202617;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:0 !important;
+  overflow:hidden;
+}
+.photo-frame img{
+  width:100%;
+  height:auto !important;
+  max-height:920px;
+  object-fit:contain !important;
+  object-position:center center !important;
+  transform:none !important;
+  filter:none !important;
+}
+.photo-story:hover .photo-frame img{transform:none !important}
+@media(max-width:760px){
+  .photo-frame{min-height:0 !important}
+  .photo-frame img{width:100%;height:auto !important;max-height:none;object-fit:contain !important}
+}
+
 </style>
 </head>
 <body>
