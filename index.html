@@ -309,7 +309,7 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
 }
 
 
-/* V3.5 — fotografía final aprobada */
+/* V3.6 — fotografía final aprobada */
 .photo-frame{
   background:#202617;
   display:flex;
@@ -331,6 +331,46 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
 @media(max-width:760px){
   .photo-frame{min-height:0 !important}
   .photo-frame img{width:100%;height:auto !important;max-height:none;object-fit:contain !important}
+}
+
+
+/* V3.6 — iconos integrados en la tarjeta de detalle */
+.gift-card{
+  display:flex;
+  flex-direction:column;
+}
+.gift-icons-only{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:28px;
+  margin-top:auto;
+  padding-top:34px;
+  padding-bottom:12px;
+}
+.gift-icon-wrap{
+  width:86px;
+  height:86px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--olive-dark);
+}
+.gift-icon-wrap svg{
+  width:68px;
+  height:68px;
+  display:block;
+}
+.gift-divider{
+  width:1px;
+  height:76px;
+  background:rgba(184,163,114,.48);
+}
+@media(max-width:760px){
+  .gift-icons-only{margin-top:28px;padding-top:16px;gap:18px}
+  .gift-icon-wrap{width:70px;height:70px}
+  .gift-icon-wrap svg{width:58px;height:58px}
+  .gift-divider{height:60px}
 }
 
 </style>
@@ -441,13 +481,33 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
           <a class="btn" href="boda-cindy-victor-v3.ics">Agregar al calendario</a>
         </div>
       </div>
-      <div class="card">
+      <div class="card gift-card">
         <div class="eyebrow">Un detalle especial</div>
         <h3 style="margin-top:12px">Tu presencia es lo más importante</h3>
         <p class="meta">
           Queremos vivir este momento rodeados de las personas que forman parte de nuestra historia.
           Gracias por acompañarnos.
         </p>
+
+        <div class="gift-icons-only" aria-label="Opciones de detalle">
+          <div class="gift-icon-wrap" title="Sobre">
+            <svg viewBox="0 0 64 64" aria-hidden="true">
+              <rect x="8" y="15" width="48" height="34" rx="3" fill="none" stroke="currentColor" stroke-width="2.4"/>
+              <path d="M10 18l22 18 22-18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10 47l16-15M54 47L38 32" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>
+              <path d="M32 31c-3.2-4.2-9.5-1.7-9.5 3.2 0 5 9.5 10 9.5 10s9.5-5 9.5-10c0-4.9-6.3-7.4-9.5-3.2z" fill="#B8A372"/>
+            </svg>
+          </div>
+          <div class="gift-divider" aria-hidden="true"></div>
+          <div class="gift-icon-wrap" title="Regalo">
+            <svg viewBox="0 0 64 64" aria-hidden="true">
+              <rect x="10" y="25" width="44" height="29" rx="2.5" fill="none" stroke="currentColor" stroke-width="2.4"/>
+              <rect x="7" y="20" width="50" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2.4"/>
+              <path d="M32 20v34" fill="none" stroke="#B8A372" stroke-width="4"/>
+              <path d="M31 20c-6-10-16-9-16-2 0 5 8 5 16 2zM33 20c6-10 16-9 16-2 0 5-8 5-16 2z" fill="none" stroke="#B8A372" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
       </div>
     </div>
   </div>
