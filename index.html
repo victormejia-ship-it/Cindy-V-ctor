@@ -146,7 +146,6 @@ h1{
 .quote{background:var(--olive-dark);color:var(--cream);text-align:center;padding:84px 20px}
 .quote p{max-width:840px;margin:auto;font:500 italic clamp(1.9rem,6vw,3.4rem) "Bodoni Moda",Georgia,serif;line-height:1.3}
 
-
 /* PHOTO STORY — V3.4 · fotografía protagonista */
 .photo-story{
   padding:0;
@@ -308,7 +307,6 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
   #opening{transition:none}
 }
 
-
 /* V3.6 — fotografía final aprobada */
 .photo-frame{
   background:#202617;
@@ -319,6 +317,9 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
   overflow:hidden;
 }
 .photo-frame img{
+  position:relative !important;
+  inset:auto !important;
+  display:block;
   width:100%;
   height:auto !important;
   max-height:920px;
@@ -329,10 +330,24 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
 }
 .photo-story:hover .photo-frame img{transform:none !important}
 @media(max-width:760px){
-  .photo-frame{min-height:0 !important}
-  .photo-frame img{width:100%;height:auto !important;max-height:none;object-fit:contain !important}
+  .photo-story{display:block}
+  .photo-story-grid{display:block;min-height:auto}
+  .photo-frame{
+    display:block;
+    width:100%;
+    min-height:0 !important;
+    background:#202617;
+  }
+  .photo-frame img{
+    position:relative !important;
+    inset:auto !important;
+    display:block;
+    width:100%;
+    height:auto !important;
+    max-height:none;
+    object-fit:contain !important;
+  }
 }
-
 
 /* V3.6 — iconos integrados en la tarjeta de detalle */
 .gift-card{
@@ -414,7 +429,6 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
   </div>
 </header>
 
-
 <section class="photo-story" aria-label="Cindy y Víctor">
   <div class="photo-story-grid">
     <div class="photo-frame">
@@ -444,23 +458,25 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
 
 <section>
   <div class="wrap">
-    <div class="eyebrow" style="text-align:center">La cuenta regresiva</div>
-    <h2 class="section-title">Cada día falta un poco menos</h2>
-    <p class="section-sub">El 16 de enero de 2027 comienza un nuevo capítulo para nosotros.</p>
+    <div class="eyebrow" style="text-align:center">Faltan</div>
+    <h2 class="section-title">Cuenta regresiva</h2>
+    <p class="section-sub">Cada día nos acerca un poco más a compartir esta noche contigo.</p>
+
     <div class="countdown">
-      <div class="count-box"><div class="num" id="days">—</div><div class="lab">Días</div></div>
-      <div class="count-box"><div class="num" id="hours">—</div><div class="lab">Horas</div></div>
-      <div class="count-box"><div class="num" id="minutes">—</div><div class="lab">Minutos</div></div>
-      <div class="count-box"><div class="num" id="seconds">—</div><div class="lab">Segundos</div></div>
+      <div class="count-box"><div class="num" id="days">000</div><div class="lab">Días</div></div>
+      <div class="count-box"><div class="num" id="hours">00</div><div class="lab">Horas</div></div>
+      <div class="count-box"><div class="num" id="mins">00</div><div class="lab">Minutos</div></div>
+      <div class="count-box"><div class="num" id="secs">00</div><div class="lab">Segundos</div></div>
     </div>
   </div>
 </section>
 
 <section id="detalles">
   <div class="wrap">
-    <div class="eyebrow" style="text-align:center">Nos vemos en</div>
+    <div class="eyebrow" style="text-align:center">Monterrey, Nuevo León</div>
     <h2 class="section-title">Salón de Eventos Martín Fierro</h2>
-    <p class="section-sub">Monterrey, Nuevo León · Recepción 20:30 hrs</p>
+    <p class="section-sub">Sábado 16 de enero de 2027 · Recepción 20:30 hrs</p>
+
     <div class="details">
       <div class="card">
         <h3>La celebración</h3>
@@ -474,13 +490,12 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
           <div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.28rem;margin-bottom:6px">Salón de Eventos Martín Fierro</div>
           <p class="meta" style="margin:0">Avenida C. 2 de Abril - Jesús Dionisio González 2302, Roma, 64700 Monterrey, N.L.</p>
         </div>
-
         <div class="actions" style="justify-content:flex-start;margin-top:0">
-          <a class="btn fill" target="_blank" rel="noopener"
-             href="https://maps.app.goo.gl/unB1Y5qZvCrwQpe69">Abrir ubicación</a>
+          <a class="btn fill" href="https://maps.app.goo.gl/unB1Y5qZvCrwQpe69" target="_blank" rel="noopener">Abrir ubicación</a>
           <a class="btn" href="boda-cindy-victor-v3.ics">Agregar al calendario</a>
         </div>
       </div>
+
       <div class="card gift-card">
         <div class="eyebrow">Un detalle especial</div>
         <h3 style="margin-top:12px">Tu presencia es lo más importante</h3>
@@ -533,70 +548,71 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
   <div class="wrap">
     <div class="dress">
       <div class="eyebrow">Con mucho cariño</div>
-      <h2 class="section-title" style="font-size:2.45rem;margin-top:10px">Celebración solo para adultos</h2>
+      <h2 class="section-title" style="font-size:2.5rem;margin-top:10px">Celebración solo para adultos</h2>
       <p class="section-sub" style="margin-bottom:0">
-        Para disfrutar plenamente de esta noche tan especial, hemos preparado una celebración exclusivamente para adultos.
-        Agradecemos mucho tu comprensión y cariño.
+        Para disfrutar plenamente de esta noche tan especial, hemos preparado una celebración exclusivamente para adultos. Agradecemos mucho tu comprensión y cariño.
       </p>
     </div>
   </div>
 </section>
 
-<section class="quote"><p>“Nuestro para siempre comienza aquí.”</p></section>
+<section class="quote">
+  <p>“Nuestro para siempre comienza aquí.”</p>
+</section>
 
 <section id="rsvp">
   <div class="wrap">
+    <div class="eyebrow" style="text-align:center">RSVP</div>
+    <h2 class="section-title">Confirma tu asistencia</h2>
+    <p class="section-sub">Nos encantará saber que compartirás esta noche con nosotros.</p>
+
     <div class="rsvp-grid">
       <div class="rsvp-intro">
-        <div class="eyebrow" style="color:#d8d3c5">RSVP</div>
-        <h2>¿Nos acompañas?</h2>
-        <p id="rsvpIntro">Confirma tu asistencia para ayudarnos a preparar cada detalle de este día tan especial.</p>
-        <div class="divider" style="background:rgba(246,241,230,.2)"></div>
-        <p style="font:500 italic 1.25rem 'Bodoni Moda',Georgia,serif">Cindy & Víctor</p>
+        <div class="eyebrow" style="color:#d4ceb9">Tu invitación</div>
+        <h2 id="rsvpGuest">Invitado especial</h2>
+        <p id="rsvpSeatCopy">
+          Nos encantará contar con tu presencia. Por favor indícanos cuántas personas de esta invitación podrán acompañarnos.
+        </p>
+        <div class="seats-chip" id="rsvpSeats">Invitación personalizada</div>
       </div>
 
-      <div class="rsvp-form">
-        <form id="rsvpForm" name="rsvp" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="gracias_v3.html">
-          <input type="hidden" name="form-name" value="rsvp">
-          <input type="hidden" name="codigo" id="codigoInput">
-          <input type="hidden" name="invitacion" id="invitationNameInput">
-          <input type="hidden" name="lugares_asignados" id="assignedSeatsInput">
-          <p style="display:none"><label>No llenar: <input name="bot-field"></label></p>
+      <form class="rsvp-form" name="rsvp-boda" method="POST" data-netlify="true" action="gracias_v3.html">
+        <input type="hidden" name="form-name" value="rsvp-boda">
+        <input type="hidden" name="codigo" id="formCode" value="">
+        <input type="hidden" name="invitado" id="formGuest" value="">
+        <input type="hidden" name="lugares_asignados" id="formSeats" value="">
 
-          <label>Invitación
-            <input type="text" id="guestDisplay" value="Invitado especial" readonly>
+        <div class="grid2">
+          <label>¿Nos acompañas?
+            <select name="asistencia" required>
+              <option value="">Selecciona</option>
+              <option value="Sí asistiré">Sí asistiré</option>
+              <option value="No podré asistir">No podré asistir</option>
+            </select>
           </label>
 
-          <div class="grid2">
-            <label>¿Nos acompañas?
-              <select name="asistencia" required>
-                <option value="">Selecciona</option>
-                <option value="Si">Sí, con gusto</option>
-                <option value="No">No podré acompañarlos</option>
-              </select>
-            </label>
-            <label>Número de asistentes
-              <select name="confirmados" id="confirmedSelect" required>
-                <option value="">Selecciona</option>
-              </select>
-            </label>
-          </div>
-
-          <label>Teléfono
-            <input type="tel" name="telefono" placeholder="Opcional">
+          <label>Personas que asistirán
+            <select name="confirmados" id="confirmados" required>
+              <option value="">Selecciona</option>
+            </select>
           </label>
+        </div>
 
-          <label>Mensaje para los novios
-            <textarea name="mensaje" placeholder="Unas palabras para Cindy & Víctor"></textarea>
-          </label>
+        <label>Teléfono de contacto
+          <input name="telefono" type="tel" autocomplete="tel" placeholder="Ej. 81 1234 5678">
+        </label>
 
-          <button class="submit" type="submit">Confirmar asistencia</button>
-          <div class="error" id="inviteError">
-            No pudimos identificar esta invitación. Por favor vuelve a abrir el enlace que recibiste por WhatsApp.
-          </div>
-          
-        </form>
-      </div>
+        <label>Mensaje para Cindy & Víctor
+          <textarea name="mensaje" placeholder="Déjanos un mensaje…"></textarea>
+        </label>
+
+        <button class="submit" type="submit">Enviar confirmación</button>
+        <p class="note">Gracias por confirmar. Esta información nos ayudará a preparar todo con mucho cariño.</p>
+      </form>
+    </div>
+
+    <div class="error" id="invalidCode">
+      No encontramos este código de invitación. Revisa el enlace recibido o comunícate con Cindy & Víctor.
     </div>
   </div>
 </section>
@@ -607,80 +623,57 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
 </footer>
 
 <script>
-/*
-V3.2 - Personalización por código + fotografía editorial.
-DEMO incorporada:
-  ?codigo=FAM001  => Familia Hernández / 4 lugares
-  ?codigo=FAM002  => Carlos y Andrea / 2 lugares
-  ?codigo=IND001  => María / 1 lugar
-
-Al conectarlo a Firebase/Firestore sustituiremos DEMO_INVITES por una lectura:
-  collection: invitaciones
-  document id: código
-  fields: nombre, saludo, lugares, estado
-*/
-const DEMO_INVITES = {
-  "FAM001": { nombre:"Familia Hernández", saludo:"Familia Hernández", lugares:4 },
-  "FAM002": { nombre:"Carlos y Andrea", saludo:"Carlos y Andrea", lugares:2 },
-  "IND001": { nombre:"María López", saludo:"María", lugares:1 }
+const guests={
+  "FAM001":{name:"Familia Hernández",greeting:"Familia Hernández",seats:4},
+  "FAM002":{name:"Carlos y Andrea",greeting:"Carlos & Andrea",seats:2},
+  "IND001":{name:"María",greeting:"María",seats:1}
 };
+const params=new URLSearchParams(location.search);
+const code=(params.get("codigo")||"").trim().toUpperCase();
+const fallback={name:"Invitado especial",greeting:"Invitado especial",seats:1};
+const guest=guests[code]||fallback;
+const valid=!code||Boolean(guests[code]);
 
-function getCode(){
-  return (new URLSearchParams(window.location.search).get("codigo") || "").trim().toUpperCase();
+document.getElementById("openingGuest").textContent=guest.greeting;
+document.getElementById("heroGuest").textContent=guest.greeting;
+document.getElementById("rsvpGuest").textContent=guest.greeting;
+
+document.getElementById("openingSeats").textContent=guest.seats===1?"Invitación para 1 persona":`Invitación para ${guest.seats} personas`;
+document.getElementById("heroSeats").textContent=guest.seats===1?"Invitación para 1 persona":`Invitación para ${guest.seats} personas`;
+document.getElementById("rsvpSeats").textContent=guest.seats===1?"Invitación para 1 persona":`Invitación para ${guest.seats} personas`;
+
+document.getElementById("formCode").value=code||"SIN-CODIGO";
+document.getElementById("formGuest").value=guest.name;
+document.getElementById("formSeats").value=guest.seats;
+
+const select=document.getElementById("confirmados");
+for(let i=1;i<=guest.seats;i++){
+  const op=document.createElement("option");
+  op.value=i;op.textContent=i;
+  select.appendChild(op);
 }
+if(!valid) document.getElementById("invalidCode").style.display="block";
 
-function applyInvite(invite, code){
-  const name = invite.saludo || invite.nombre || "Invitado especial";
-  const seats = Math.max(1, Number(invite.lugares || 1));
-  const seatLabel = seats === 1 ? "Invitación para 1 persona" : "Invitación para " + seats + " personas";
-
-  document.getElementById("openingGuest").textContent = name;
-  document.getElementById("openingSeats").textContent = seatLabel;
-  document.getElementById("heroGuest").textContent = name;
-  document.getElementById("heroSeats").textContent = seatLabel;
-  document.getElementById("guestDisplay").value = invite.nombre || name;
-  document.getElementById("codigoInput").value = code;
-  document.getElementById("invitationNameInput").value = invite.nombre || name;
-  document.getElementById("assignedSeatsInput").value = seats;
-  document.getElementById("rsvpIntro").textContent =
-    "Nos encantará contar con tu presencia. Por favor indícanos cuántas personas de esta invitación podrán acompañarnos.";
-
-  const sel = document.getElementById("confirmedSelect");
-  sel.innerHTML = '<option value="">Selecciona</option>';
-  for(let i=1;i<=seats;i++){
-    const op = document.createElement("option");
-    op.value = i;
-    op.textContent = i;
-    sel.appendChild(op);
+const target=new Date("2027-01-16T20:30:00-06:00").getTime();
+function tick(){
+  const d=target-Date.now();
+  if(d<=0){
+    document.getElementById("days").textContent="000";
+    document.getElementById("hours").textContent="00";
+    document.getElementById("mins").textContent="00";
+    document.getElementById("secs").textContent="00";
+    return;
   }
+  const day=Math.floor(d/86400000);
+  const hr=Math.floor((d%86400000)/3600000);
+  const min=Math.floor((d%3600000)/60000);
+  const sec=Math.floor((d%60000)/1000);
+  document.getElementById("days").textContent=String(day).padStart(3,"0");
+  document.getElementById("hours").textContent=String(hr).padStart(2,"0");
+  document.getElementById("mins").textContent=String(min).padStart(2,"0");
+  document.getElementById("secs").textContent=String(sec).padStart(2,"0");
 }
-
-const code = getCode();
-if(code && DEMO_INVITES[code]){
-  applyInvite(DEMO_INVITES[code], code);
-}else{
-  document.getElementById("inviteError").style.display = "block";
-  document.getElementById("codigoInput").value = code || "SIN-CODIGO";
-  const sel = document.getElementById("confirmedSelect");
-  sel.innerHTML = '<option value="">Código requerido</option>';
-}
-
-/* Countdown */
-(function(){
-  const target = new Date("2027-01-16T20:30:00-06:00").getTime();
-  function update(){
-    let diff=Math.max(0,target-Date.now());
-    const d=Math.floor(diff/86400000); diff-=d*86400000;
-    const h=Math.floor(diff/3600000); diff-=h*3600000;
-    const m=Math.floor(diff/60000); diff-=m*60000;
-    const s=Math.floor(diff/1000);
-    document.getElementById("days").textContent=d;
-    document.getElementById("hours").textContent=String(h).padStart(2,"0");
-    document.getElementById("minutes").textContent=String(m).padStart(2,"0");
-    document.getElementById("seconds").textContent=String(s).padStart(2,"0");
-  }
-  update(); setInterval(update,1000);
-})();
+tick();setInterval(tick,1000);
 </script>
 </body>
 </html>
