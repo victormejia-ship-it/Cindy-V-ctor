@@ -388,6 +388,35 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
   .gift-divider{height:60px}
 }
 
+/* Footer móvil refinado */
+footer .names{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  line-height:1.08;
+}
+footer .names .footer-name,
+footer .names .footer-amp{
+  display:block;
+}
+footer .names .footer-amp{
+  color:var(--gold);
+  font-style:italic;
+  margin:2px 0;
+}
+@media(max-width:760px){
+  footer{padding:54px 20px}
+  footer .names{
+    font-size:clamp(2rem,10vw,3rem);
+    margin-bottom:18px;
+  }
+  footer .mini{
+    font-size:.72rem;
+    letter-spacing:.16em;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -618,7 +647,11 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
 </section>
 
 <footer>
-  <div class="names">Cindy Yaneth Hernández Martínez & Víctor Mejía Chávez</div>
+  <div class="names">
+    <span class="footer-name">Cindy</span>
+    <span class="footer-amp">&amp;</span>
+    <span class="footer-name">Víctor</span>
+  </div>
   <div class="mini">16 · 01 · 2027 · MONTERREY</div>
 </footer>
 
