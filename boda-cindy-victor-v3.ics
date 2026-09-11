@@ -1,0 +1,14 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Cindy y Victor//Boda//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:boda-cindy-victor-20270116@cindyyvictor
+DTSTAMP:20260911T150000Z
+DTSTART:20270117T023000Z
+SUMMARY:Boda de Cindy & Víctor
+LOCATION:Salón de Eventos Martín Fierro, Monterrey, Nuevo León, México
+DESCRIPTION:Recepción de boda de Cindy Yaneth Hernández Martínez y Víctor Mejía Chávez.
+END:VEVENT
+END:VCALENDAR

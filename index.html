@@ -5,8 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#2F3522">
-<title>Cindy & Víctor — Invitación</title>
+<title>Cindy & Víctor — 16 · 01 · 2027</title>
 <meta name="description" content="Invitación de boda de Cindy Yaneth Hernández Martínez y Víctor Mejía Chávez.">
+<link rel="preload" as="image" href="cindy-victor-boda.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -145,6 +146,76 @@ h1{
 .quote{background:var(--olive-dark);color:var(--cream);text-align:center;padding:84px 20px}
 .quote p{max-width:840px;margin:auto;font:500 italic clamp(1.9rem,6vw,3.4rem) "Bodoni Moda",Georgia,serif;line-height:1.3}
 
+
+/* PHOTO STORY — V3.4 · fotografía protagonista */
+.photo-story{
+  padding:0;
+  background:var(--olive-dark);
+  color:var(--cream);
+}
+.photo-story-grid{
+  min-height:82vh;
+  display:grid;
+  grid-template-columns:minmax(0,1.25fr) minmax(320px,.75fr);
+}
+.photo-frame{
+  position:relative;
+  min-height:82vh;
+  overflow:hidden;
+  background:#1f2418;
+}
+.photo-frame img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 48%;
+  filter:saturate(.92) contrast(.98) brightness(.96);
+}
+.photo-frame:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(22,25,17,.02),rgba(22,25,17,.18));
+  pointer-events:none;
+}
+.photo-copy{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:clamp(44px,7vw,92px);
+  border-left:1px solid rgba(246,241,230,.15);
+}
+.photo-copy .eyebrow{color:#cfc8b8}
+.photo-copy h2{
+  margin:14px 0 20px;
+  font:500 clamp(3rem,6vw,5.7rem) "Bodoni Moda",Georgia,serif;
+  line-height:.92;
+  letter-spacing:-.04em;
+  color:var(--cream);
+}
+.photo-copy p{
+  max-width:430px;
+  margin:0;
+  color:#d9d4c7;
+  line-height:1.8;
+}
+.photo-mark{
+  width:54px;height:54px;
+  display:grid;place-items:center;
+  border:1px solid rgba(246,241,230,.45);
+  border-radius:50%;
+  margin-top:34px;
+  font:500 18px "Bodoni Moda",Georgia,serif;
+}
+@media(max-width:760px){
+  .photo-story-grid{grid-template-columns:1fr;min-height:auto}
+  .photo-frame{min-height:72vh}
+  .photo-copy{padding:52px 26px 58px;border-left:0;border-top:1px solid rgba(246,241,230,.15)}
+  .photo-copy h2{font-size:clamp(3rem,14vw,4.6rem)}
+}
+
 /* RSVP */
 .rsvp-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:20px}
 .rsvp-intro,.rsvp-form{padding:36px;border:1px solid var(--line)}
@@ -179,6 +250,64 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
   .card,.rsvp-intro,.rsvp-form{padding:27px}
   .opening-card{min-height:calc(100dvh - 44px)}
 }
+
+/* V3.4 — refinamiento fotográfico y dress code final */
+.photo-frame{
+  isolation:isolate;
+}
+.photo-frame img{
+  transform:scale(1.015);
+  transition:transform 8s cubic-bezier(.2,.65,.2,1), filter .8s ease;
+}
+.photo-story:hover .photo-frame img{transform:scale(1.045)}
+.photo-vignette{
+  position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(20,23,15,.18),transparent 26%,transparent 74%,rgba(20,23,15,.14)),
+    linear-gradient(180deg,rgba(20,23,15,.02) 48%,rgba(20,23,15,.30) 100%);
+}
+.photo-caption{
+  position:absolute; z-index:3; left:28px; right:28px; bottom:24px;
+  display:flex; align-items:center; gap:12px;
+  color:rgba(246,241,230,.92);
+  font-size:.62rem; letter-spacing:.18em; text-transform:uppercase;
+}
+.caption-line{height:1px;flex:1;background:rgba(246,241,230,.42)}
+.photo-signature{
+  margin-top:26px;
+  font:500 1.05rem "Bodoni Moda",Georgia,serif;
+  letter-spacing:.18em;
+  color:#d7cfbd;
+}
+.dress-final{
+  position:relative;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(168,174,138,.10),transparent 40%),
+    rgba(255,255,255,.18);
+}
+.white-reserved{
+  display:inline-flex; align-items:center; gap:10px;
+  margin-top:8px; padding:12px 16px;
+  border:1px solid var(--line);
+  color:var(--olive-dark);
+  font-size:.78rem; letter-spacing:.04em;
+}
+.white-dot{
+  width:18px;height:18px;border-radius:50%;
+  background:#fff;border:1px solid rgba(45,45,40,.22);
+  box-shadow:inset 0 0 0 2px rgba(246,241,230,.7);
+}
+@media(max-width:760px){
+  .photo-frame{min-height:76vh}
+  .photo-caption{left:18px;right:18px;bottom:18px}
+  .photo-story:hover .photo-frame img{transform:scale(1.025)}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .photo-frame img{transition:none;transform:none}
+  #opening{transition:none}
+}
+
 </style>
 </head>
 <body>
@@ -220,6 +349,34 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
   </div>
 </header>
 
+
+<section class="photo-story" aria-label="Cindy y Víctor">
+  <div class="photo-story-grid">
+    <div class="photo-frame">
+      <img src="cindy-victor-boda.png"
+           alt="Cindy y Víctor celebrando su boda en Monterrey"
+           loading="eager"
+           decoding="async">
+      <div class="photo-vignette" aria-hidden="true"></div>
+      <div class="photo-caption">
+        <span>Monterrey · 2027</span>
+        <span class="caption-line"></span>
+        <span>C &amp; V</span>
+      </div>
+    </div>
+    <div class="photo-copy">
+      <div class="eyebrow">Cindy &amp; Víctor</div>
+      <h2>Una historia.<br>Un sí.<br>Para siempre.</h2>
+      <p>
+        Queremos compartir contigo una noche que guardaremos para siempre:
+        el comienzo de una nueva etapa, rodeados de las personas que forman parte de nuestra historia.
+      </p>
+      <div class="photo-signature">16 · 01 · 2027</div>
+      <div class="photo-mark">C&amp;V</div>
+    </div>
+  </div>
+</section>
+
 <section>
   <div class="wrap">
     <div class="eyebrow" style="text-align:center">La cuenta regresiva</div>
@@ -237,19 +394,25 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
 <section id="detalles">
   <div class="wrap">
     <div class="eyebrow" style="text-align:center">Nos vemos en</div>
-    <h2 class="section-title">Las Pampas Eventos</h2>
+    <h2 class="section-title">Salón de Eventos Martín Fierro</h2>
     <p class="section-sub">Monterrey, Nuevo León · Recepción 20:30 hrs</p>
     <div class="details">
       <div class="card">
         <h3>La celebración</h3>
         <p class="meta"><strong>Sábado 16 de enero de 2027</strong></p>
         <p class="meta">Recepción · 20:30 hrs</p>
-        <p class="meta">Las Pampas Eventos</p>
-        <p class="meta">Monterrey, Nuevo León</p>
+        <p class="meta">Salón de Eventos Martín Fierro</p>
+        <p class="meta">Avenida C. 2 de Abril - Jesús Dionisio González 2302, Roma, 64700 Monterrey, N.L.</p>
         <div class="divider"></div>
+        <div class="venue-pin" style="margin:18px 0 20px;padding:16px 18px;border:1px solid rgba(75,82,53,.22);border-radius:16px;background:rgba(255,255,255,.32)">
+          <div class="eyebrow" style="margin-bottom:7px">Ubicación de la celebración</div>
+          <div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.28rem;margin-bottom:6px">Salón de Eventos Martín Fierro</div>
+          <p class="meta" style="margin:0">Avenida C. 2 de Abril - Jesús Dionisio González 2302, Roma, 64700 Monterrey, N.L.</p>
+        </div>
+
         <div class="actions" style="justify-content:flex-start;margin-top:0">
           <a class="btn fill" target="_blank" rel="noopener"
-             href="https://www.google.com/maps/search/?api=1&query=Las+Pampas+Eventos+Monterrey">Cómo llegar</a>
+             href="https://maps.app.goo.gl/unB1Y5qZvCrwQpe69">Abrir ubicación</a>
           <a class="btn" href="boda-cindy-victor-v3.ics">Agregar al calendario</a>
         </div>
       </div>
@@ -267,15 +430,16 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
 
 <section>
   <div class="wrap">
-    <div class="dress">
+    <div class="dress dress-final">
       <div class="eyebrow">Código de vestimenta</div>
-      <h2 class="section-title" style="font-size:2.5rem;margin-top:10px">Elegancia de noche</h2>
-      <p class="section-sub" style="margin-bottom:10px">Sugerencia visual: tonos sobrios y elegantes.</p>
-      <div class="palette">
-        <span class="swatch sw1"></span><span class="swatch sw2"></span>
-        <span class="swatch sw3"></span><span class="swatch sw4"></span>
+      <h2 class="section-title" style="font-size:2.7rem;margin-top:10px">Formal</h2>
+      <p class="section-sub" style="margin-bottom:14px">
+        Queremos verte elegante y disfrutar juntos de esta noche tan especial.
+      </p>
+      <div class="white-reserved">
+        <span class="white-dot" aria-hidden="true"></span>
+        <span>El color blanco está reservado para la novia.</span>
       </div>
-      <p class="note">Podemos sustituir este texto cuando definan el código de vestimenta final.</p>
     </div>
   </div>
 </section>
@@ -359,7 +523,7 @@ footer .mini{font-size:.7rem;letter-spacing:.14em}
 
 <script>
 /*
-V3 - Personalización por código.
+V3.2 - Personalización por código + fotografía editorial.
 DEMO incorporada:
   ?codigo=FAM001  => Familia Hernández / 4 lugares
   ?codigo=FAM002  => Carlos y Andrea / 2 lugares
