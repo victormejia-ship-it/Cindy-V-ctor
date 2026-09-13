@@ -91,28 +91,27 @@ Colecciones previstas:
 - `invitaciones`
 - `confirmaciones`
 
-## Cambio visual más reciente PENDIENTE de implementar/publicar
-La sección **“Un detalle especial”** debe cambiar así:
-- Mantener encabezado: `Tu presencia es lo más importante`
-- Eliminar el icono de regalo.
-- Dejar únicamente el icono SVG de sobre con detalle dorado.
-- No repetir la idea de “presencia” en el párrafo porque ya está en el encabezado.
-- Copy sugerido:
-  `Si deseas obsequiarnos, te lo agradecemos de corazón; tu detalle nos ayudará a seguir construyendo nuestros planes juntos.`
-- Mantener composición elegante y espaciosa.
+## Cambios implementados (commit `06e023f` en `main`)
+La sección **“Un detalle especial”** ya quedó así:
+- Encabezado: `Tu presencia es lo más importante` (sin cambios).
+- Icono de regalo eliminado.
+- Solo queda el icono SVG de sobre con detalle dorado.
+- Copy actualizado: `Si deseas obsequiarnos, te lo agradecemos de corazón; tu detalle nos ayudará a seguir construyendo nuestros planes juntos.`
 
-## Otro ajuste pendiente
-Hay demasiado espacio vertical entre las secciones:
-- `Código de vestimenta`
-- `Celebración solo para adultos`
-Reducir el espacio entre ambas sin alterar el diseño general.
+El espacio vertical entre `Código de vestimenta` y `Celebración solo para adultos` ya se redujo: ambos bloques se unieron en una sola tarjeta con borde continuo, sin alterar el resto del diseño.
+
+Publicado en GitHub (`main`), **pendiente de reflejarse en Firebase Hosting** (ver Pendientes).
+
+## Pendientes
+- **Automatizar despliegue GitHub → Firebase Hosting.** Hoy el flujo es manual (PowerShell: descargar `index.html` desde GitHub a `Desktop/public/index.html` y ejecutar `firebase deploy --only hosting`), por lo que los cambios en `main` no se publican solos. Opción recomendada: GitHub Action con el plugin oficial `FirebaseExtended/action-hosting-deploy`, disparado en cada push a `main`, usando un service account de Firebase guardado como secret del repo (`FIREBASE_SERVICE_ACCOUNT_CV26` o similar). Requiere que el dueño del proyecto genere y suba esa credencial a GitHub Secrets — no se puede automatizar sin ese paso manual inicial.
+- Mover invitaciones a Firestore (ver sección "Invitados / personalización").
+- Integrar el RSVP real a Firestore.
 
 ## Flujo recomendado
-1. Editar `index.html` en GitHub.
+1. Editar `index.html` en GitHub (o directamente en este repo con Claude).
 2. Revisar en escritorio y móvil.
-3. Publicar a Firebase Hosting.
+3. Publicar a Firebase Hosting (manual por ahora; ver Pendientes para automatizarlo).
 4. Mantener GitHub como fuente maestra.
-5. Idealmente automatizar después GitHub → Firebase.
 
 ## Restricciones importantes
 - No reintroducir emojis para sobre/regalo.
