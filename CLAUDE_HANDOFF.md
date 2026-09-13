@@ -52,7 +52,7 @@ Continuar el desarrollo y publicación de la invitación digital de boda de **Ci
 
 ## Sección de nombres
 Usar:
-- `Cindy Yaneth` grande
+- `Cindy` grande (sin "Yaneth" — se retiró de toda la invitación por decisión del usuario)
 - `HERNÁNDEZ MARTÍNEZ` pequeño
 - `&` dorado
 - `Víctor` grande
