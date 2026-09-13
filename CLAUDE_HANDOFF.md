@@ -10,11 +10,14 @@ Continuar el desarrollo y publicación de la invitación digital de boda de **Ci
 ## Hosting actual
 - Firebase project: `CV26`
 - Project ID: `cv26-f99e2`
-- URL pública: `https://cv26-f99e2.web.app`
 - Firebase Hosting clásico, plan Spark.
-- El despliegue actual se hace manualmente desde PowerShell con:
+- **URL principal para compartir con invitados:** `https://cindyvictor2027.web.app`
+  - Es un "sitio adicional" (multisite) dentro del mismo proyecto `cv26-f99e2`, creado para tener un link más bonito/personalizado que el nombre del proyecto.
+  - Vinculado mediante un hosting *target* llamado `invitacion` (ver `.firebaserc` local del usuario, no versionado en este repo).
+- URL original del proyecto (sigue activa, no se usa para compartir): `https://cv26-f99e2.web.app`
+- El despliegue se hace manualmente desde PowerShell, en la carpeta local del usuario (Escritorio) donde vive `firebase.json`:
   1. descargar `index.html` desde GitHub hacia `Desktop/public/index.html`
-  2. ejecutar `firebase deploy --only hosting`
+  2. ejecutar `firebase deploy --only hosting:invitacion` (nota: ya NO es `firebase deploy --only hosting` a secas, porque `firebase.json` ahora tiene `"target": "invitacion"` en vez de apuntar al sitio default)
 
 ## Arquitectura actual
 - Frontend: HTML/CSS/JS estático.
@@ -111,7 +114,7 @@ El monograma "C|V" (símbolo `#cvmark`, reutilizado vía `<use>`) se reconstruy�
 Publicado en GitHub (`main`), **pendiente de reflejarse en Firebase Hosting** (ver Pendientes).
 
 ## Pendientes
-- **Automatizar despliegue GitHub → Firebase Hosting.** Hoy el flujo es manual (PowerShell: descargar `index.html` desde GitHub a `Desktop/public/index.html` y ejecutar `firebase deploy --only hosting`), por lo que los cambios en `main` no se publican solos. Opción recomendada: GitHub Action con el plugin oficial `FirebaseExtended/action-hosting-deploy`, disparado en cada push a `main`, usando un service account de Firebase guardado como secret del repo (`FIREBASE_SERVICE_ACCOUNT_CV26` o similar). Requiere que el dueño del proyecto genere y suba esa credencial a GitHub Secrets — no se puede automatizar sin ese paso manual inicial.
+- **Automatizar despliegue GitHub → Firebase Hosting.** Hoy el flujo es manual (PowerShell: descargar `index.html` desde GitHub a `Desktop/public/index.html` y ejecutar `firebase deploy --only hosting:invitacion`), por lo que los cambios en `main` no se publican solos. Opción recomendada: GitHub Action con el plugin oficial `FirebaseExtended/action-hosting-deploy`, disparado en cada push a `main`, usando un service account de Firebase guardado como secret del repo (`FIREBASE_SERVICE_ACCOUNT_CV26` o similar). Requiere que el dueño del proyecto genere y suba esa credencial a GitHub Secrets — no se puede automatizar sin ese paso manual inicial.
 - Mover invitaciones a Firestore (ver sección "Invitados / personalización").
 - Integrar el RSVP real a Firestore.
 
