@@ -25,7 +25,8 @@ Continuar el desarrollo y publicación de la invitación digital de boda de **Ci
 
 ## Archivos clave
 - `index.html` — invitación principal.
-- `cindy-victor-boda.png` — fotografía principal.
+- `CV2026.jpeg` — fotografía real de la pareja (usada como fondo del hero).
+- `cindy-victor-boda.png` — **NO es una foto**: es una captura de pantalla de una maqueta de diseño de referencia (con nav, íconos, secciones). Se usó como guía para reconstruir `index.html` (ver "Diseño actual") pero no debe usarse como imagen en el sitio.
 - `boda-cindy-victor-v3.ics` — calendario.
 - `gracias_v3.html` — página de agradecimiento.
 
@@ -91,14 +92,21 @@ Colecciones previstas:
 - `invitaciones`
 - `confirmaciones`
 
-## Cambios implementados (commit `06e023f` en `main`)
-La sección **“Un detalle especial”** ya quedó así:
-- Encabezado: `Tu presencia es lo más importante` (sin cambios).
-- Icono de regalo eliminado.
-- Solo queda el icono SVG de sobre con detalle dorado.
-- Copy actualizado: `Si deseas obsequiarnos, te lo agradecemos de corazón; tu detalle nos ayudará a seguir construyendo nuestros planes juntos.`
+## Diseño actual (reconstruido en commit `ab8c271`)
+El sitio se reconstruyó para igualar una maqueta de referencia que el usuario tenía guardada (por error) como `cindy-victor-boda.png`. Estructura actual de `index.html`, de arriba a abajo:
+1. Tarjeta de apertura (`#opening`) — click en "Abrir invitación" para entrar. Sin logo ni raspado (versión simple original).
+2. `<nav class="topnav">` — fijo arriba: monograma CV, links (Inicio / Nuestra historia / Detalles / Confirma), ícono de corazón "Juntos siempre".
+3. `<header class="hero2" id="inicio">` — foto real (`CV2026.jpeg`) de fondo con panel oscuro degradado a la izquierda (nombres, monograma, fecha, ubicación) y frase en script "La vida es mejor contigo" abajo a la derecha.
+4. `.feat-row.light` (`#detalles-info`) — 3 columnas con íconos: Recepción, Ubicación (botón Google Maps), Agregar al calendario (botón .ics). **No incluye ceremonia religiosa** — el usuario confirmó que ese dato en la maqueta era genérico/no real.
+5. `.feat-row.dark` — 4 columnas: Código de vestimenta, Regalo, Solo adultos, Confirma tu asistencia (botón a `#rsvp`).
+6. `.thanks` — banner "Gracias por ser parte / De este nuevo capítulo" con ramitas de olivo decorativas en las esquinas (mismo arte SVG que el monograma, símbolo `#leafspray`).
+7. `#fecha` — "Guarda la fecha", 4 círculos raspables (día/mes/año/ciudad).
+8. Cuenta regresiva.
+9. Quote ("Nuestro para siempre comienza aquí").
+10. `#rsvp` — formulario completo (aún no conectado a Firestore).
+11. Footer con monograma y nombres.
 
-El espacio vertical entre `Código de vestimenta` y `Celebración solo para adultos` ya se redujo: ambos bloques se unieron en una sola tarjeta con borde continuo, sin alterar el resto del diseño.
+El monograma "C|V" (símbolo `#cvmark`, reutilizado vía `<use>`) se reconstruyó en SVG a partir de una foto de referencia del usuario: C y V separadas por una línea vertical, rama de olivo confinada arriba sin cruzar las letras, tipografía Bodoni Moda no itálica. Se usa en nav, hero, footer y (como `#leafspray`, solo la ramita) en el banner de agradecimiento.
 
 Publicado en GitHub (`main`), **pendiente de reflejarse en Firebase Hosting** (ver Pendientes).
 
@@ -121,4 +129,4 @@ Publicado en GitHub (`main`), **pendiente de reflejarse en Firebase Hosting** (v
 - No cambiar el estilo general sin aprobación.
 
 ## Prompt de continuación sugerido para Claude
-`Continúa este proyecto respetando CLAUDE_HANDOFF.md y el estado actual del repositorio. Antes de cambiar diseño o estructura, revisa index.html. Mantén GitHub como fuente maestra y Firebase Hosting como publicación. Prioriza compatibilidad móvil/iPhone. Implementa primero los cambios pendientes de la sección “Un detalle especial” y reduce el espacio entre Código de vestimenta y Celebración solo para adultos, sin modificar el resto del diseño.`
+`Continúa este proyecto respetando CLAUDE_HANDOFF.md y el estado actual del repositorio. Antes de cambiar diseño o estructura, revisa index.html y esta sección "Diseño actual". Mantén GitHub como fuente maestra y Firebase Hosting como publicación. Prioriza compatibilidad móvil/iPhone. Los pendientes principales son automatizar el despliegue a Firebase y conectar Firestore al RSVP (ver "Pendientes").`
