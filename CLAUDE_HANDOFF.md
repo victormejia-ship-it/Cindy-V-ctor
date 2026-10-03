@@ -25,7 +25,8 @@ El 14 de septiembre de 2026 se perdieron ~3 horas depurando por qué `cindyvicto
 ```powershell
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Cindy-V-ctor/main/index.html" -OutFile "index.html"
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Cindy-V-ctor/main/CV2026.jpeg" -OutFile "CV2026.jpeg"
-Get-Item index.html, CV2026.jpeg | Select-Object Name, Length, LastWriteTime
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Cindy-V-ctor/main/intro-cv.mp4" -OutFile "intro-cv.mp4"
+Get-Item index.html, CV2026.jpeg, intro-cv.mp4 | Select-Object Name, Length, LastWriteTime
 ```
 
 Confirmar que `LastWriteTime` sea de HOY (no de días atrás) antes de desplegar. Usar `Invoke-WebRequest` en vez de "Guardar como" del navegador porque es determinista y no depende de dónde el navegador decida guardar el archivo ni de qué caché use.
@@ -40,6 +41,8 @@ Confirmar que `LastWriteTime` sea de HOY (no de días atrás) antes de desplegar
 ## Archivos clave
 - `index.html` — invitación principal.
 - `CV2026.jpeg` — fotografía real de la pareja (usada como fondo del hero).
+- `intro-cv.mp4` — video de intro que se reproduce automáticamente antes de la tarjeta "Abrir invitación". Transcodificado a H.264/AAC (960x540, ~3.7MB) porque el archivo original que subió el usuario venía en HEVC/H.265 (típico de iPhone), que Chrome en Android/Windows y Firefox no reproducen. Tiene botón "Omitir" y si el video falla (error o navegador sin soporte) se salta automáticamente a la tarjeta de apertura.
+- `CV_opcion_1_clasica_elegante_vector.svg` / `CV_opcion_1_vector_claro_fondo_oscuro.svg` — archivos fuente del logotipo C|V vectorizado (versión oscura para fondos claros y versión clara para fondos oscuros), ya integrados como símbolos `#cvmark` y `#cvmark-light` dentro de `index.html`. Conservar por si se necesita volver a extraer o regenerar.
 - `cindy-victor-boda.png` — **NO es una foto**: es una captura de pantalla de una maqueta de diseño de referencia (con nav, íconos, secciones). Se usó como guía para reconstruir `index.html` (ver "Diseño actual") pero no debe usarse como imagen en el sitio.
 - `boda-cindy-victor-v3.ics` — calendario.
 - `gracias_v3.html` — página de agradecimiento.
