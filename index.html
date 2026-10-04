@@ -39,8 +39,12 @@ form.addEventListener('submit',function(e){
   data.append('personas',form.confirmados.value);
   data.append('telefono',form.telefono.value);
   data.append('mensaje',form.mensaje.value);
-  fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',body:data}).catch(function(){}).finally(function(){
+  fetch(APPS_SCRIPT_URL,{method:'POST',body:data}).then(function(r){return r.text()}).then(function(txt){
+    console.log('RSVP response:',txt);
     window.location.href='gracias_v3.html'
+  }).catch(function(err){
+    console.log('RSVP error:',err);
+    alert('Hubo un problema al enviar tu confirmacion: '+err+'. Por favor intentalo de nuevo o avisale a Victor.');
   });
 });
 })();</script></body></html>
