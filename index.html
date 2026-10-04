@@ -30,8 +30,13 @@ vid.addEventListener('ended',function(){card.classList.remove('playing');vid.cur
 var APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbwCWgkCMbzHUd3ba7umLr7BL-maeoYryZX-1uJv3M1UFBAe6VSYrBCBmjPKeMNG-QHZ/exec';
 var form=document.getElementById('rsvpForm');
 if(!form)return;
+var rsvpSubmitting=false;
 form.addEventListener('submit',function(e){
   e.preventDefault();
+  if(rsvpSubmitting)return;
+  rsvpSubmitting=true;
+  var btn=form.querySelector('button.submit');
+  if(btn){btn.disabled=true;btn.textContent='Enviando...'}
   var data=new URLSearchParams();
   data.append('invitado',(window.rsvpGuest&&rsvpGuest.textContent)||'');
   data.append('codigo',(window.codeInput&&codeInput.value)||'');
