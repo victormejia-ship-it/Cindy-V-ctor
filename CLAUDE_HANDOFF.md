@@ -26,7 +26,8 @@ El 14 de septiembre de 2026 se perdieron ~3 horas depurando por qué `cindyvicto
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Cindy-V-ctor/main/index.html" -OutFile "index.html"
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Cindy-V-ctor/main/CV2026.jpeg" -OutFile "CV2026.jpeg"
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Cindy-V-ctor/main/intro-cv.mp4" -OutFile "intro-cv.mp4"
-Get-Item index.html, CV2026.jpeg, intro-cv.mp4 | Select-Object Name, Length, LastWriteTime
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Cindy-V-ctor/main/admin.html" -OutFile "admin.html"
+Get-Item index.html, CV2026.jpeg, intro-cv.mp4, admin.html | Select-Object Name, Length, LastWriteTime
 ```
 
 Confirmar que `LastWriteTime` sea de HOY (no de días atrás) antes de desplegar. Usar `Invoke-WebRequest` en vez de "Guardar como" del navegador porque es determinista y no depende de dónde el navegador decida guardar el archivo ni de qué caché use.
@@ -126,6 +127,20 @@ El sitio se reconstruyó para igualar una maqueta de referencia que el usuario t
 El monograma "C|V" (símbolo `#cvmark`, reutilizado vía `<use>`) se reconstruyó en SVG a partir de una foto de referencia del usuario: C y V separadas por una línea vertical, rama de olivo confinada arriba sin cruzar las letras, tipografía Bodoni Moda no itálica. Se usa en nav, hero, footer y (como `#leafspray`, solo la ramita) en el banner de agradecimiento.
 
 Publicado en GitHub (`main`), **pendiente de reflejarse en Firebase Hosting** (ver Pendientes).
+
+## Panel de Administración (admin.html)
+Panel privado de wedding planner, **completamente aislado** de la invitación pública: archivo propio `admin.html`, CSS/JS propios (tipografía Inter, paleta blanco/gris, sin relación visual con `index.html`), y `index.html` no se modificó para nada de esto.
+
+- **Acceso:** pantalla de PIN antes de mostrar cualquier dato (hash SHA-256 comparado en el navegador, desbloqueo guardado en `sessionStorage` por pestaña). PIN actual por defecto: `270116`. Esto es un filtro para que un invitado no entre por error, no es seguridad fuerte — cualquiera que revise el código fuente podría intentar adivinarlo. Para cambiarlo: generar `sha256(nuevoPIN)` y reemplazar la constante `PIN_HASH` en `admin.html`.
+- **Fuentes de datos (3), todas de solo lectura excepto la nueva):**
+  1. Lista maestra de invitados → la misma hoja de Google Sheets publicada como CSV que ya usa `index.html` (sin cambios).
+  2. Confirmaciones RSVP → el mismo Apps Script "RSVP Boda" de siempre, al que se le agregó un `doGet` (ver `apps-script/rsvp-doGet-agregar.gs`) que expone las confirmaciones en JSON. No afecta el `doPost` que usa el formulario público.
+  3. Datos nuevos que no existían antes (mesas, alergias, proveedores/pagos, itinerario, pendientes) → una hoja de cálculo **nueva** "Wedding Planner Data" + un Apps Script **nuevo e independiente** ("Planner Data API", ver `apps-script/planner-api.gs`), con pestañas `Vendors`, `Itinerary`, `Tasks`, `Overrides`, `Config`.
+- **Pendiente de configurar por el usuario** (ver instrucciones dentro de cada archivo `.gs`):
+  1. Agregar el `doGet` al Apps Script "RSVP Boda" existente y redesplegar (misma URL).
+  2. Crear la hoja "Wedding Planner Data" con las pestañas/encabezados exactos indicados en `apps-script/planner-api.gs`, pegar ese código en un Apps Script nuevo vinculado a ella, desplegar como Web App, y pegar la URL resultante en `admin.html` reemplazando `PEGA_AQUI_LA_URL_DEL_NUEVO_WEB_APP_PLANNER_DATA_API`.
+  3. Agregar `admin.html` al checklist de descarga antes de cada deploy (ver abajo).
+- Mientras no se configure el paso 2, el panel funciona igual para Resumen/Invitados (con datos reales) y muestra avisos de "Configura PLANNER_API_URL" en Proveedores/Itinerario/Pendientes.
 
 ## Pendientes
 - **Automatizar despliegue GitHub → Firebase Hosting.** Hoy el flujo es manual (PowerShell: descargar `index.html` desde GitHub a `Desktop/public/index.html` y ejecutar `firebase deploy --only hosting:invitacion`), por lo que los cambios en `main` no se publican solos. Opción recomendada: GitHub Action con el plugin oficial `FirebaseExtended/action-hosting-deploy`, disparado en cada push a `main`, usando un service account de Firebase guardado como secret del repo (`FIREBASE_SERVICE_ACCOUNT_CV26` o similar). Requiere que el dueño del proyecto genere y suba esa credencial a GitHub Secrets — no se puede automatizar sin ese paso manual inicial.

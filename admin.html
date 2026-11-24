@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Panel de Administración — Cindy &amp; Víctor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f6f8;--surface:#ffffff;--border:#e3e6ea;--border-strong:#d1d5db;
+  --text:#1b1f23;--text-muted:#6b7280;--text-faint:#9ca3af;
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-bg:#eff4ff;
+  --green:#16a34a;--green-bg:#eafbf0;--amber:#b45309;--amber-bg:#fef6e7;--red:#dc2626;--red-bg:#fdecec;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,"Segoe UI",Arial,sans-serif;font-size:14px;line-height:1.5}
+button,input,select,textarea{font-family:inherit;font-size:inherit}
+
+/* ---------- Login gate ---------- */
+#gate{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;padding:20px}
+.gate-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 32px;width:100%;max-width:340px;text-align:center;box-shadow:0 10px 30px rgba(16,24,40,.06)}
+.gate-card h1{font-size:1.05rem;font-weight:700;margin:0 0 6px}
+.gate-card p{color:var(--text-muted);font-size:.82rem;margin:0 0 20px}
+.gate-card input{width:100%;padding:11px 12px;border:1px solid var(--border-strong);border-radius:8px;text-align:center;letter-spacing:.25em;font-weight:600;margin-bottom:12px}
+.gate-card input:focus{outline:2px solid var(--primary);outline-offset:1px;border-color:var(--primary)}
+.gate-card button{width:100%;padding:11px;border:none;border-radius:8px;background:var(--primary);color:#fff;font-weight:600;cursor:pointer}
+.gate-card button:hover{background:var(--primary-dark)}
+.gate-err{color:var(--red);font-size:.78rem;height:16px;margin-top:10px}
+#app{display:none}
+
+/* ---------- Shell ---------- */
+.topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--primary)}
+.brand h1{font-size:.95rem;font-weight:700;margin:0}
+.brand span{color:var(--text-muted);font-weight:400}
+.countdown-chip{background:var(--primary-bg);color:var(--primary-dark);border-radius:999px;padding:6px 14px;font-size:.78rem;font-weight:600;white-space:nowrap}
+.tabs{display:flex;gap:4px;padding:0 24px;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto}
+.tab-btn{border:none;background:none;padding:13px 16px;font-size:.84rem;font-weight:500;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tab-btn.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+main{max-width:1180px;margin:0 auto;padding:24px}
+.view{display:none}
+.view.active{display:block}
+
+/* ---------- Cards / grid ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:20px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+.card .k{color:var(--text-muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.card .v{font-size:1.5rem;font-weight:700}
+.card .v small{font-size:.8rem;color:var(--text-muted);font-weight:500}
+.section-title{font-size:.95rem;font-weight:700;margin:28px 0 12px}
+.section-title:first-child{margin-top:0}
+
+/* ---------- Toolbar ---------- */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.toolbar input[type=text],.toolbar select{padding:8px 10px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface)}
+.toolbar input[type=text]{flex:1;min-width:160px}
+.btn{padding:8px 14px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);cursor:pointer;font-weight:500;color:var(--text)}
+.btn:hover{background:#f2f3f5}
+.btn-primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-sm{padding:4px 9px;font-size:.78rem;border-radius:6px}
+.btn-danger{color:var(--red);border-color:var(--red-bg)}
+
+/* ---------- Table ---------- */
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{text-align:left;padding:10px 12px;background:#fafbfc;color:var(--text-muted);font-weight:600;font-size:.74rem;text-transform:uppercase;letter-spacing:.03em;border-bottom:1px solid var(--border)}
+td{padding:9px 12px;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:none}
+td input,td select{width:100%;padding:5px 6px;border:1px solid transparent;border-radius:5px;background:transparent}
+td input:hover,td select:hover,td input:focus,td select:focus{border-color:var(--border-strong);background:var(--surface)}
+.tag{display:inline-block;padding:3px 9px;border-radius:999px;font-size:.74rem;font-weight:600}
+.tag-green{background:var(--green-bg);color:var(--green)}
+.tag-amber{background:var(--amber-bg);color:var(--amber)}
+.tag-red{background:var(--red-bg);color:var(--red)}
+.tag-gray{background:#f1f2f4;color:var(--text-muted)}
+.empty{padding:30px;text-align:center;color:var(--text-faint)}
+.muted{color:var(--text-muted)}
+.right{text-align:right}
+.hint{font-size:.78rem;color:var(--text-muted);margin:-6px 0 14px}
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="gate-card">
+    <h1>Panel de Administración</h1>
+    <p>Boda de Cindy &amp; Víctor — acceso restringido</p>
+    <input type="password" id="pinInput" inputmode="numeric" placeholder="PIN" autocomplete="off">
+    <button id="pinBtn" type="button">Entrar</button>
+    <div class="gate-err" id="pinErr"></div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span><h1>Wedding Planner <span>· Cindy &amp; Víctor</span></h1></div>
+    <div class="countdown-chip" id="countdownChip">—</div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" data-view="resumen">Resumen</button>
+    <button class="tab-btn" data-view="invitados">Invitados</button>
+    <button class="tab-btn" data-view="proveedores">Proveedores</button>
+    <button class="tab-btn" data-view="itinerario">Itinerario</button>
+    <button class="tab-btn" data-view="pendientes">Pendientes</button>
+  </div>
+
+  <main>
+
+    <!-- RESUMEN -->
+    <section class="view active" id="view-resumen">
+      <div class="section-title">Invitados</div>
+      <div class="grid" id="guestStats"></div>
+      <div class="section-title">Finanzas</div>
+      <div class="grid" id="moneyStats"></div>
+      <div class="toolbar" style="max-width:320px">
+        <input type="text" id="budgetInput" placeholder="Presupuesto total (MXN)">
+        <button class="btn" id="budgetSaveBtn">Guardar</button>
+      </div>
+    </section>
+
+    <!-- INVITADOS -->
+    <section class="view" id="view-invitados">
+      <div class="toolbar">
+        <input type="text" id="guestSearch" placeholder="Buscar por nombre o código...">
+        <select id="guestStatusFilter">
+          <option value="">Todos los estados</option>
+          <option value="confirmado">Confirmado</option>
+          <option value="pendiente">Pendiente</option>
+          <option value="declinado">No asiste</option>
+        </select>
+        <select id="guestTableFilter"><option value="">Todas las mesas</option></select>
+        <button class="btn" id="exportCsvBtn">Exportar CSV</button>
+        <button class="btn" id="refreshGuestsBtn">Actualizar</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Código</th><th>Invitado</th><th>Lugares</th><th>Estado</th><th>Personas confirma</th><th>Mesa</th><th>Alergias</th><th>Nota</th></tr></thead>
+          <tbody id="guestRows"><tr><td colspan="8" class="empty">Cargando...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PROVEEDORES -->
+    <section class="view" id="view-proveedores">
+      <div class="toolbar">
+        <button class="btn btn-primary" id="addVendorBtn">+ Agregar proveedor</button>
+        <button class="btn" id="refreshVendorsBtn">Actualizar</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Proveedor</th><th>Categoría</th><th>Costo</th><th>Depósito</th><th>Saldo</th><th>Fecha límite</th><th>Pagado</th><th></th></tr></thead>
+          <tbody id="vendorRows"><tr><td colspan="8" class="empty">Cargando...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ITINERARIO -->
+    <section class="view" id="view-itinerario">
+      <div class="toolbar">
+        <button class="btn btn-primary" id="addItemBtn">+ Agregar actividad</button>
+        <button class="btn" id="refreshItinBtn">Actualizar</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:90px">Hora</th><th>Actividad</th><th>Responsable</th><th>Notas</th><th></th></tr></thead>
+          <tbody id="itinRows"><tr><td colspan="5" class="empty">Cargando...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PENDIENTES -->
+    <section class="view" id="view-pendientes">
+      <div class="toolbar">
+        <select id="taskMonth">
+          <option>Noviembre 2026</option><option>Diciembre 2026</option><option>Enero 2027</option>
+        </select>
+        <input type="text" id="taskInput" placeholder="Nueva tarea...">
+        <button class="btn btn-primary" id="addTaskBtn">Agregar</button>
+        <button class="btn" id="refreshTasksBtn">Actualizar</button>
+      </div>
+      <div id="taskGroups"></div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ====================== CONFIG ====================== */
+var PIN_HASH = '5a3f800a43c31d984d4b26b44c7c5a88e69200984ad4a1c2fe1d7afc76b3ed80';
+var CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQnDXmv56UNBOd3QUJJPeLru30mJ85ZIJJoFjIrkybCuG0NbFqYTwOkFC2KkyPA0Q/pub?gid=180815780&single=true&output=csv';
+var RSVP_API_URL = 'https://script.google.com/macros/s/AKfycbwCWgkCMbzHUd3ba7umLr7BL-maeoYryZX-1uJv3M1UFBAe6VSYrBCBmjPKeMNG-QHZ/exec';
+var PLANNER_API_URL = 'PEGA_AQUI_LA_URL_DEL_NUEVO_WEB_APP_PLANNER_DATA_API';
+var WEDDING_DATE = new Date('2027-01-16T20:30:00-06:00');
+
+/* ====================== LOGIN GATE ====================== */
+var gate=document.getElementById('gate'), app=document.getElementById('app');
+async function sha256(text){
+  var buf=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+}
+function unlock(){ gate.style.display='none'; app.style.display='block'; init(); }
+if(sessionStorage.getItem('admUnlocked')==='1'){ unlock(); }
+document.getElementById('pinBtn').addEventListener('click', tryPin);
+document.getElementById('pinInput').addEventListener('keydown', function(e){ if(e.key==='Enter') tryPin(); });
+function tryPin(){
+  var val=document.getElementById('pinInput').value.trim();
+  sha256(val).then(function(hash){
+    if(hash===PIN_HASH){ sessionStorage.setItem('admUnlocked','1'); unlock(); }
+    else { document.getElementById('pinErr').textContent='PIN incorrecto'; }
+  });
+}
+
+/* ====================== HELPERS ====================== */
+function parseCSV(text){
+  var rows=[],row=[],field='',inQ=false;
+  for(var i=0;i<text.length;i++){
+    var c=text[i];
+    if(inQ){
+      if(c==='"'){ if(text[i+1]==='"'){field+='"';i++;} else inQ=false; }
+      else field+=c;
+    } else {
+      if(c==='"') inQ=true;
+      else if(c===','){ row.push(field); field=''; }
+      else if(c==='\n'){ row.push(field); rows.push(row); row=[]; field=''; }
+      else if(c==='\r'){}
+      else field+=c;
+    }
+  }
+  if(field.length||row.length){ row.push(field); rows.push(row); }
+  return rows;
+}
+function money(n){ n=Number(n)||0; return '$'+n.toLocaleString('es-MX',{maximumFractionDigits:0}); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function uid(){ return 'id'+Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
+
+function apiGet(url, params){
+  var q = Object.keys(params||{}).map(function(k){ return encodeURIComponent(k)+'='+encodeURIComponent(params[k]); }).join('&');
+  return fetch(url + (q?('?'+q):'')).then(function(r){ return r.json(); });
+}
+function apiPost(url, params){
+  var body = new URLSearchParams(params);
+  return fetch(url, {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: body.toString()})
+    .then(function(r){ return r.text(); }).then(function(t){ try{ return JSON.parse(t); }catch(e){ return {raw:t}; } });
+}
+
+/* ====================== STATE ====================== */
+var state = { guests:[], confirmations:[], overrides:[], vendors:[], itinerary:[], tasks:[], config:{} };
+
+/* ====================== COUNTDOWN ====================== */
+function tickCountdown(){
+  var now=new Date(), diff=WEDDING_DATE-now;
+  var chip=document.getElementById('countdownChip');
+  if(diff<=0){ chip.textContent='¡Es hoy!'; return; }
+  var d=Math.floor(diff/86400000), h=Math.floor(diff%86400000/3600000);
+  chip.textContent=d+' días y '+h+'h para la boda';
+}
+
+/* ====================== DATA LOADING ====================== */
+function loadGuests(){
+  return fetch(CSV_URL).then(function(r){return r.text();}).then(function(text){
+    var rows=parseCSV(text).slice(1).filter(function(r){ return r[0]; });
+    state.guests = rows.map(function(r){
+      return { codigo:(r[0]||'').trim().toUpperCase(), invitado:(r[1]||'').trim(), lugares:parseInt(r[2],10)||1 };
+    });
+  }).catch(function(){ state.guests=[]; });
+}
+function loadConfirmations(){
+  return apiGet(RSVP_API_URL, {}).then(function(data){
+    state.confirmations = Array.isArray(data) ? data.map(function(r){
+      return { codigo:(r.codigo||'').trim().toUpperCase(), asistencia:r.asistencia||'', personas:r.personas||'', telefono:r.telefono||'', mensaje:r.mensaje||'', timestamp:r.timestamp||'' };
+    }) : [];
+  }).catch(function(){ state.confirmations=[]; });
+}
+function plannerConfigured(){ return PLANNER_API_URL.indexOf('PEGA_AQUI') === -1; }
+function loadPlanner(){
+  if(!plannerConfigured()) return Promise.resolve();
+  return apiGet(PLANNER_API_URL, {}).then(function(data){
+    state.overrides = data.overrides || [];
+    state.vendors = data.vendors || [];
+    state.itinerary = data.itinerary || [];
+    state.tasks = data.tasks || [];
+    var cfg={}; (data.config||[]).forEach(function(r){ cfg[r.clave]=r.valor; });
+    state.config = cfg;
+  }).catch(function(){});
+}
+
+function joinedGuests(){
+  return state.guests.map(function(g){
+    var conf = state.confirmations.find(function(c){ return c.codigo===g.codigo; });
+    var ov = state.overrides.find(function(o){ return (o.codigo||'').trim().toUpperCase()===g.codigo; }) || {};
+    var status = conf ? (conf.asistencia==='si'||conf.asistencia==='sí'||/asist|si/i.test(conf.asistencia||'') ? 'confirmado' : 'declinado') : 'pendiente';
+    return {
+      codigo:g.codigo, invitado:g.invitado, lugares:g.lugares,
+      status: conf ? status : 'pendiente',
+      personas: conf ? conf.personas : '',
+      mesa: ov.mesa||'', alergias: ov.alergias||'', nota: ov.nota||''
+    };
+  });
+}
+
+/* ====================== RENDER: RESUMEN ====================== */
+function renderResumen(){
+  var joined = joinedGuests();
+  var confirmados = joined.filter(function(g){return g.status==='confirmado';});
+  var pendientes = joined.filter(function(g){return g.status==='pendiente';});
+  var declinados = joined.filter(function(g){return g.status==='declinado';});
+  var personasConfirmadas = confirmados.reduce(function(s,g){return s+(parseInt(g.personas,10)||0);},0);
+  var alergias = joined.filter(function(g){return g.alergias && g.alergias.trim();}).length;
+
+  document.getElementById('guestStats').innerHTML = [
+    card('Confirmados', confirmados.length, 'invitaciones'),
+    card('Pendientes', pendientes.length, 'invitaciones'),
+    card('No asisten', declinados.length, 'invitaciones'),
+    card('Personas confirmadas', personasConfirmadas, 'asistentes'),
+    card('Con alergias reportadas', alergias, 'invitados')
+  ].join('');
+
+  var presupuesto = Number(state.config.presupuesto_total)||0;
+  var costoTotal = state.vendors.reduce(function(s,v){return s+(Number(v.costo)||0);},0);
+  var pagado = state.vendors.reduce(function(s,v){return s+(Number(v.deposito)||0);},0);
+  var saldo = costoTotal - pagado;
+
+  document.getElementById('moneyStats').innerHTML = [
+    card('Presupuesto', money(presupuesto)),
+    card('Costo total proveedores', money(costoTotal)),
+    card('Pagado (depósitos)', money(pagado)),
+    card('Saldo pendiente', money(saldo))
+  ].join('');
+
+  document.getElementById('budgetInput').value = presupuesto || '';
+}
+function card(label, value, suffix){
+  return '<div class="card"><div class="k">'+esc(label)+'</div><div class="v">'+esc(value)+(suffix?' <small>'+esc(suffix)+'</small>':'')+'</div></div>';
+}
+
+/* ====================== RENDER: INVITADOS ====================== */
+function statusTag(status){
+  if(status==='confirmado') return '<span class="tag tag-green">Confirmado</span>';
+  if(status==='declinado') return '<span class="tag tag-red">No asiste</span>';
+  return '<span class="tag tag-amber">Pendiente</span>';
+}
+function renderGuestTableFilterOptions(joined){
+  var sel=document.getElementById('guestTableFilter');
+  var current=sel.value;
+  var mesas = Array.from(new Set(joined.map(function(g){return g.mesa;}).filter(Boolean))).sort();
+  sel.innerHTML = '<option value="">Todas las mesas</option>' + mesas.map(function(m){return '<option value="'+esc(m)+'">'+esc(m)+'</option>';}).join('');
+  sel.value = current;
+}
+function renderInvitados(){
+  var joined = joinedGuests();
+  renderGuestTableFilterOptions(joined);
+  var q=(document.getElementById('guestSearch').value||'').trim().toLowerCase();
+  var statusF=document.getElementById('guestStatusFilter').value;
+  var mesaF=document.getElementById('guestTableFilter').value;
+  var rows = joined.filter(function(g){
+    if(q && g.invitado.toLowerCase().indexOf(q)===-1 && g.codigo.toLowerCase().indexOf(q)===-1) return false;
+    if(statusF && g.status!==statusF) return false;
+    if(mesaF && g.mesa!==mesaF) return false;
+    return true;
+  });
+  var tbody=document.getElementById('guestRows');
+  if(!rows.length){ tbody.innerHTML='<tr><td colspan="8" class="empty">Sin resultados</td></tr>'; return; }
+  tbody.innerHTML = rows.map(function(g){
+    return '<tr data-codigo="'+esc(g.codigo)+'">'+
+      '<td>'+esc(g.codigo)+'</td>'+
+      '<td>'+esc(g.invitado)+'</td>'+
+      '<td>'+esc(g.lugares)+'</td>'+
+      '<td>'+statusTag(g.status)+'</td>'+
+      '<td>'+esc(g.personas||'—')+'</td>'+
+      '<td><input type="text" class="ov-mesa" value="'+esc(g.mesa)+'" placeholder="—"></td>'+
+      '<td><input type="text" class="ov-alergias" value="'+esc(g.alergias)+'" placeholder="—"></td>'+
+      '<td><input type="text" class="ov-nota" value="'+esc(g.nota)+'" placeholder="—"></td>'+
+    '</tr>';
+  }).join('');
+  Array.from(tbody.querySelectorAll('input')).forEach(function(inp){
+    inp.addEventListener('change', function(){ saveOverrideFromRow(inp.closest('tr')); });
+  });
+}
+function saveOverrideFromRow(tr){
+  if(!plannerConfigured()){ alert('Configura PLANNER_API_URL antes de poder guardar mesa/alergias/notas.'); return; }
+  var codigo = tr.getAttribute('data-codigo');
+  var guest = state.guests.find(function(g){return g.codigo===codigo;});
+  var data = {
+    codigo: codigo,
+    invitado: guest ? guest.invitado : '',
+    mesa: tr.querySelector('.ov-mesa').value,
+    alergias: tr.querySelector('.ov-alergias').value,
+    nota: tr.querySelector('.ov-nota').value
+  };
+  var exists = state.overrides.some(function(o){ return (o.codigo||'').trim().toUpperCase()===codigo; });
+  apiPost(PLANNER_API_URL, {table:'overrides', action: exists?'update':'add', data: JSON.stringify(data)}).then(function(){
+    return loadPlanner();
+  }).then(renderAll);
+}
+document.getElementById('guestSearch').addEventListener('input', renderInvitados);
+document.getElementById('guestStatusFilter').addEventListener('change', renderInvitados);
+document.getElementById('guestTableFilter').addEventListener('change', renderInvitados);
+document.getElementById('refreshGuestsBtn').addEventListener('click', function(){
+  Promise.all([loadGuests(), loadConfirmations()]).then(renderAll);
+});
+document.getElementById('exportCsvBtn').addEventListener('click', function(){
+  var joined = joinedGuests();
+  var header=['Codigo','Invitado','Lugares','Estado','Personas confirma','Mesa','Alergias','Nota'];
+  var lines=[header.join(',')];
+  joined.forEach(function(g){
+    var row=[g.codigo,g.invitado,g.lugares,g.status,g.personas,g.mesa,g.alergias,g.nota];
+    lines.push(row.map(function(v){ v=String(v==null?'':v); return /[",\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; }).join(','));
+  });
+  var blob=new Blob(['﻿'+lines.join('\r\n')], {type:'text/csv;charset=utf-8'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='invitados-cindy-victor.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+});
+
+/* ====================== RENDER: PROVEEDORES ====================== */
+function dueAlert(fecha, pagado){
+  if(pagado) return '';
+  if(!fecha) return '';
+  var d=new Date(fecha); if(isNaN(d)) return '';
+  var days=Math.floor((d-new Date())/86400000);
+  if(days<0) return '<span class="tag tag-red" style="margin-left:6px">Vencido</span>';
+  if(days<=14) return '<span class="tag tag-amber" style="margin-left:6px">En '+days+'d</span>';
+  return '';
+}
+function renderProveedores(){
+  var tbody=document.getElementById('vendorRows');
+  if(!plannerConfigured()){ tbody.innerHTML='<tr><td colspan="8" class="empty">Configura PLANNER_API_URL para usar esta sección</td></tr>'; return; }
+  if(!state.vendors.length){ tbody.innerHTML='<tr><td colspan="8" class="empty">Sin proveedores. Agrega el primero.</td></tr>'; return; }
+  tbody.innerHTML = state.vendors.map(function(v){
+    var saldo = (Number(v.costo)||0) - (Number(v.deposito)||0);
+    return '<tr data-id="'+esc(v.id)+'">'+
+      '<td><input type="text" data-f="proveedor" value="'+esc(v.proveedor)+'"></td>'+
+      '<td><input type="text" data-f="categoria" value="'+esc(v.categoria)+'"></td>'+
+      '<td><input type="number" data-f="costo" value="'+esc(v.costo)+'"></td>'+
+      '<td><input type="number" data-f="deposito" value="'+esc(v.deposito)+'"></td>'+
+      '<td>'+money(saldo)+'</td>'+
+      '<td><input type="date" data-f="fecha_limite" value="'+esc(v.fecha_limite)+'">'+dueAlert(v.fecha_limite, v.pagado==='TRUE'||v.pagado===true||v.pagado==='true')+'</td>'+
+      '<td style="text-align:center"><input type="checkbox" data-f="pagado" '+((v.pagado==='TRUE'||v.pagado===true||v.pagado==='true')?'checked':'')+'></td>'+
+      '<td class="right"><button class="btn btn-sm btn-danger" data-del="vendor">Eliminar</button></td>'+
+    '</tr>';
+  }).join('');
+  wireRowEditing(tbody, 'vendors');
+}
+function wireRowEditing(tbody, table){
+  Array.from(tbody.querySelectorAll('input')).forEach(function(inp){
+    inp.addEventListener('change', function(){
+      var tr=inp.closest('tr'); var id=tr.getAttribute('data-id');
+      var data={id:id};
+      Array.from(tr.querySelectorAll('[data-f]')).forEach(function(f){
+        data[f.getAttribute('data-f')] = f.type==='checkbox' ? f.checked : f.value;
+      });
+      apiPost(PLANNER_API_URL, {table:table, action:'update', data:JSON.stringify(data)}).then(function(){
+        return loadPlanner();
+      }).then(renderAll);
+    });
+  });
+  Array.from(tbody.querySelectorAll('[data-del]')).forEach(function(btn){
+    btn.addEventListener('click', function(){
+      if(!confirm('¿Eliminar esta fila?')) return;
+      var tr=btn.closest('tr'); var id=tr.getAttribute('data-id');
+      apiPost(PLANNER_API_URL, {table:table, action:'delete', data:JSON.stringify({id:id})}).then(function(){
+        return loadPlanner();
+      }).then(renderAll);
+    });
+  });
+}
+document.getElementById('addVendorBtn').addEventListener('click', function(){
+  if(!plannerConfigured()){ alert('Configura PLANNER_API_URL primero.'); return; }
+  apiPost(PLANNER_API_URL, {table:'vendors', action:'add', data: JSON.stringify({proveedor:'Nuevo proveedor',categoria:'',costo:0,deposito:0,fecha_limite:'',pagado:false})})
+    .then(function(){ return loadPlanner(); }).then(renderAll);
+});
+document.getElementById('refreshVendorsBtn').addEventListener('click', function(){ loadPlanner().then(renderAll); });
+
+/* ====================== RENDER: ITINERARIO ====================== */
+function renderItinerario(){
+  var tbody=document.getElementById('itinRows');
+  if(!plannerConfigured()){ tbody.innerHTML='<tr><td colspan="5" class="empty">Configura PLANNER_API_URL para usar esta sección</td></tr>'; return; }
+  var items = state.itinerary.slice().sort(function(a,b){ return (a.hora||'').localeCompare(b.hora||''); });
+  if(!items.length){ tbody.innerHTML='<tr><td colspan="5" class="empty">Sin actividades. Agrega la primera.</td></tr>'; return; }
+  tbody.innerHTML = items.map(function(it){
+    return '<tr data-id="'+esc(it.id)+'">'+
+      '<td><input type="time" data-f="hora" value="'+esc(it.hora)+'"></td>'+
+      '<td><input type="text" data-f="actividad" value="'+esc(it.actividad)+'"></td>'+
+      '<td><input type="text" data-f="responsable" value="'+esc(it.responsable)+'"></td>'+
+      '<td><input type="text" data-f="notas" value="'+esc(it.notas)+'"></td>'+
+      '<td class="right"><button class="btn btn-sm btn-danger" data-del="itinerary">Eliminar</button></td>'+
+    '</tr>';
+  }).join('');
+  wireRowEditing(tbody, 'itinerary');
+}
+document.getElementById('addItemBtn').addEventListener('click', function(){
+  if(!plannerConfigured()){ alert('Configura PLANNER_API_URL primero.'); return; }
+  apiPost(PLANNER_API_URL, {table:'itinerary', action:'add', data: JSON.stringify({hora:'20:30',actividad:'Nueva actividad',responsable:'',notas:''})})
+    .then(function(){ return loadPlanner(); }).then(renderAll);
+});
+document.getElementById('refreshItinBtn').addEventListener('click', function(){ loadPlanner().then(renderAll); });
+
+/* ====================== RENDER: PENDIENTES ====================== */
+function renderPendientes(){
+  var wrap=document.getElementById('taskGroups');
+  if(!plannerConfigured()){ wrap.innerHTML='<div class="empty">Configura PLANNER_API_URL para usar esta sección</div>'; return; }
+  var byMonth={};
+  state.tasks.forEach(function(t){ (byMonth[t.mes||'Sin mes']=byMonth[t.mes||'Sin mes']||[]).push(t); });
+  var months=Object.keys(byMonth);
+  if(!months.length){ wrap.innerHTML='<div class="empty">Sin tareas todavía.</div>'; return; }
+  wrap.innerHTML = months.map(function(mes){
+    var tasks=byMonth[mes];
+    var rows = tasks.map(function(t){
+      var done = t.hecho==='TRUE'||t.hecho===true||t.hecho==='true';
+      return '<tr data-id="'+esc(t.id)+'">'+
+        '<td style="width:30px"><input type="checkbox" class="task-done" '+(done?'checked':'')+'></td>'+
+        '<td style="'+(done?'text-decoration:line-through;color:var(--text-faint)':'')+'">'+esc(t.tarea)+'</td>'+
+        '<td class="right"><button class="btn btn-sm btn-danger" data-del="tasks">Eliminar</button></td>'+
+      '</tr>';
+    }).join('');
+    return '<div class="section-title">'+esc(mes)+'</div><div class="table-wrap"><table><tbody>'+rows+'</tbody></table></div>';
+  }).join('');
+  Array.from(wrap.querySelectorAll('.task-done')).forEach(function(cb){
+    cb.addEventListener('change', function(){
+      var tr=cb.closest('tr'); var id=tr.getAttribute('data-id');
+      apiPost(PLANNER_API_URL, {table:'tasks', action:'update', data:JSON.stringify({id:id, hecho:cb.checked})})
+        .then(function(){ return loadPlanner(); }).then(renderAll);
+    });
+  });
+  Array.from(wrap.querySelectorAll('[data-del]')).forEach(function(btn){
+    btn.addEventListener('click', function(){
+      if(!confirm('¿Eliminar esta tarea?')) return;
+      var tr=btn.closest('tr'); var id=tr.getAttribute('data-id');
+      apiPost(PLANNER_API_URL, {table:'tasks', action:'delete', data:JSON.stringify({id:id})})
+        .then(function(){ return loadPlanner(); }).then(renderAll);
+    });
+  });
+}
+document.getElementById('addTaskBtn').addEventListener('click', function(){
+  if(!plannerConfigured()){ alert('Configura PLANNER_API_URL primero.'); return; }
+  var txt=document.getElementById('taskInput').value.trim();
+  if(!txt) return;
+  var mes=document.getElementById('taskMonth').value;
+  apiPost(PLANNER_API_URL, {table:'tasks', action:'add', data: JSON.stringify({mes:mes, tarea:txt, hecho:false})})
+    .then(function(){ document.getElementById('taskInput').value=''; return loadPlanner(); }).then(renderAll);
+});
+document.getElementById('refreshTasksBtn').addEventListener('click', function(){ loadPlanner().then(renderAll); });
+
+/* ====================== BUDGET ====================== */
+document.getElementById('budgetSaveBtn').addEventListener('click', function(){
+  if(!plannerConfigured()){ alert('Configura PLANNER_API_URL primero.'); return; }
+  var val=document.getElementById('budgetInput').value;
+  var exists = 'presupuesto_total' in state.config;
+  apiPost(PLANNER_API_URL, {table:'config', action: exists?'update':'add', data: JSON.stringify({clave:'presupuesto_total', valor:val})})
+    .then(function(){ return loadPlanner(); }).then(renderAll);
+});
+
+/* ====================== TABS ====================== */
+Array.from(document.querySelectorAll('.tab-btn')).forEach(function(btn){
+  btn.addEventListener('click', function(){
+    Array.from(document.querySelectorAll('.tab-btn')).forEach(function(b){b.classList.remove('active');});
+    Array.from(document.querySelectorAll('.view')).forEach(function(v){v.classList.remove('active');});
+    btn.classList.add('active');
+    document.getElementById('view-'+btn.getAttribute('data-view')).classList.add('active');
+  });
+});
+
+/* ====================== INIT ====================== */
+function renderAll(){
+  renderResumen(); renderInvitados(); renderProveedores(); renderItinerario(); renderPendientes();
+}
+function init(){
+  tickCountdown(); setInterval(tickCountdown, 60000);
+  Promise.all([loadGuests(), loadConfirmations(), loadPlanner()]).then(renderAll);
+}
+})();
+</script>
+</body>
+</html>
