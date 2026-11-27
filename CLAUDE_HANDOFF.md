@@ -27,7 +27,8 @@ Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Ci
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Cindy-V-ctor/main/CV2026.jpeg" -OutFile "CV2026.jpeg"
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Cindy-V-ctor/main/intro-cv.mp4" -OutFile "intro-cv.mp4"
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Cindy-V-ctor/main/admin.html" -OutFile "admin.html"
-Get-Item index.html, CV2026.jpeg, intro-cv.mp4, admin.html | Select-Object Name, Length, LastWriteTime
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Cindy-V-ctor/main/camara.html" -OutFile "camara.html"
+Get-Item index.html, CV2026.jpeg, intro-cv.mp4, admin.html, camara.html | Select-Object Name, Length, LastWriteTime
 ```
 
 Confirmar que `LastWriteTime` sea de HOY (no de días atrás) antes de desplegar. Usar `Invoke-WebRequest` en vez de "Guardar como" del navegador porque es determinista y no depende de dónde el navegador decida guardar el archivo ni de qué caché use.
@@ -141,6 +142,15 @@ Panel privado de wedding planner, **completamente aislado** de la invitación p�
   2. Crear la hoja "Wedding Planner Data" con las pestañas/encabezados exactos indicados en `apps-script/planner-api.gs`, pegar ese código en un Apps Script nuevo vinculado a ella, desplegar como Web App, y pegar la URL resultante en `admin.html` reemplazando `PEGA_AQUI_LA_URL_DEL_NUEVO_WEB_APP_PLANNER_DATA_API`.
   3. Agregar `admin.html` al checklist de descarga antes de cada deploy (ver abajo).
 - Mientras no se configure el paso 2, el panel funciona igual para Resumen/Invitados (con datos reales) y muestra avisos de "Configura PLANNER_API_URL" en Proveedores/Itinerario/Pendientes.
+
+## Cámara desechable digital (camara.html)
+Actividad para invitados inspirada en la app "Reveal": cada invitado toma hasta 15 fotos desde su celular (cámara en vivo en el navegador, sin apps) que quedan en secreto hasta que se revelan todas juntas, de todos los invitados, el 17 de enero de 2027 a mediodía.
+
+- **Acceso:** un solo link/QR para todos (`camara.html`, enlazado desde una sección nueva en `index.html`, "Nuestra cámara desechable"). Al entrar, cada invitado escribe su nombre una vez (se guarda en `localStorage` de su propio celular junto con un ID de rollo aleatorio) y no se le vuelve a pedir.
+- **Cámara:** `getUserMedia` en vivo, con contador de disparos, flash (torch si el dispositivo lo soporta, más destello visual siempre), y botón para cambiar cámara frontal/trasera. Las fotos se comprimen a JPEG (máx. 1280px) antes de subirse.
+- **Almacenamiento:** Apps Script nuevo e independiente ("Photo Booth API", ver `apps-script/photo-booth-api.gs`) que guarda las fotos directo en una carpeta de Google Drive ("Fotos Boda Cindy y Victor"), sin usar ninguna hoja de cálculo. El límite de 15 fotos por invitado y la fecha de revelado se verifican del lado del servidor (no se pueden "espiar" las fotos antes de tiempo inspeccionando el código).
+- **Pendiente de configurar por el usuario:** crear el Apps Script con `apps-script/photo-booth-api.gs`, desplegarlo como Web App, y pegar la URL resultante en `camara.html` reemplazando `PEGA_AQUI_LA_URL_DEL_WEB_APP_PHOTO_BOOTH_API`. Mientras no se configure, la cámara funciona en modo de prueba local (cuenta fotos solo en el navegador, sin guardarlas) y la galería muestra "no está configurada".
+- Agregar `camara.html` al checklist de descarga antes de cada deploy (ver abajo).
 
 ## Pendientes
 - **Automatizar despliegue GitHub → Firebase Hosting.** Hoy el flujo es manual (PowerShell: descargar `index.html` desde GitHub a `Desktop/public/index.html` y ejecutar `firebase deploy --only hosting:invitacion`), por lo que los cambios en `main` no se publican solos. Opción recomendada: GitHub Action con el plugin oficial `FirebaseExtended/action-hosting-deploy`, disparado en cada push a `main`, usando un service account de Firebase guardado como secret del repo (`FIREBASE_SERVICE_ACCOUNT_CV26` o similar). Requiere que el dueño del proyecto genere y suba esa credencial a GitHub Secrets — no se puede automatizar sin ese paso manual inicial.
