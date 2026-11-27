@@ -1,0 +1,14 @@
+{
+  "hosting": {
+    "target": "invitacion",
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "apps-script/**",
+      "CLAUDE_HANDOFF.md",
+      "cindy-victor-boda.png"
+    ]
+  }
+}

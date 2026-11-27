@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "cv26-f99e2"
+  },
+  "targets": {
+    "cv26-f99e2": {
+      "hosting": {
+        "invitacion": [
+          "cindyvictor2027"
+        ]
+      }
+    }
+  }
+}
