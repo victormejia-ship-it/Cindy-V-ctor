@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cámara desechable — Cindy &amp; Víctor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;500;600&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--c:#F6F1E6;--p:#FBF8F2;--o:#5E6740;--d:#2F3522;--g:#B8A372;--i:#2D2D28;--m:#777466;--l:rgba(94,103,64,.22)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;background:var(--c);color:var(--i);font-family:Manrope,Arial,sans-serif;padding-bottom:40px}
+h1,h2{font-family:"Bodoni Moda",Georgia,serif;font-weight:500;margin:0}
+.wrap{width:min(560px,calc(100% - 32px));margin:0 auto}
+.topbar{padding:18px 0 10px;text-align:center}
+.topbar a{display:inline-block;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--o);text-decoration:none;margin-bottom:10px}
+.logo{height:44px;width:auto;display:block;margin:0 auto 8px}
+.topbar h1{font-size:1.3rem;color:var(--d)}
+.topbar p{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--m);margin:4px 0 0}
+
+.tabs{display:flex;gap:8px;margin:18px 0 20px;background:var(--p);border:1px solid var(--l);border-radius:30px;padding:4px}
+.tab{flex:1;border:none;background:none;padding:10px;border-radius:26px;font-family:inherit;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--m);cursor:pointer}
+.tab.active{background:var(--o);color:#fff}
+
+.view{display:none}
+.view.active{display:block}
+
+.card{background:var(--p);border:1px solid var(--l);border-radius:16px;padding:28px 24px;text-align:center}
+.card p{color:var(--m);font-size:.85rem;line-height:1.6;margin:10px 0 0}
+input[type=text]{width:100%;padding:13px 14px;border:1px solid var(--l);border-radius:10px;background:#fff;font-family:inherit;font-size:.95rem;text-align:center;margin-top:18px}
+input[type=text]:focus{outline:2px solid var(--o);outline-offset:1px}
+.btn{display:inline-block;margin-top:16px;padding:12px 22px;border-radius:30px;background:var(--o);color:#fff;border:none;font-family:inherit;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;text-decoration:none}
+.btn:disabled{opacity:.45;cursor:default}
+
+/* ---- camera ---- */
+.cam-shell{position:relative;background:#111;border-radius:18px;overflow:hidden;aspect-ratio:3/4;box-shadow:0 20px 50px rgba(47,53,34,.25)}
+.cam-shell video{width:100%;height:100%;object-fit:cover;display:block;transform:scaleX(-1)}
+.cam-shell.back video{transform:none}
+.counter-badge{position:absolute;top:14px;right:14px;background:rgba(0,0,0,.55);color:#fff;font-size:.78rem;letter-spacing:.05em;padding:6px 12px;border-radius:20px;font-family:Manrope}
+.flash-overlay{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.flash-overlay.go{animation:flashpop .35s ease-out}
+@keyframes flashpop{0%{opacity:.9}100%{opacity:0}}
+.cam-controls{display:flex;align-items:center;justify-content:center;gap:26px;margin-top:20px}
+.icon-btn{width:46px;height:46px;border-radius:50%;border:1px solid var(--l);background:var(--p);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--o)}
+.shutter{width:72px;height:72px;border-radius:50%;background:#fff;border:4px solid var(--o);cursor:pointer}
+.shutter:active{background:var(--c)}
+.shutter:disabled{opacity:.4}
+.cam-hint{text-align:center;color:var(--m);font-size:.72rem;letter-spacing:.06em;margin-top:14px}
+
+/* ---- gallery ---- */
+.countdown-box{font:500 1.6rem "Bodoni Moda";color:var(--d);margin-top:14px}
+.gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+.gallery-item{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:1;background:#eee;opacity:0;animation:fadein .6s ease forwards}
+.gallery-item img{width:100%;height:100%;object-fit:cover;display:block}
+.gallery-item .tag{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.55));color:#fff;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;padding:14px 8px 6px;text-align:center}
+@keyframes fadein{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.section-label{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--o);margin:26px 0 10px}
+.empty-note{text-align:center;color:var(--m);font-size:.8rem;padding:30px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a href="index.html">&larr; Volver a la invitación</a>
+    <img class="logo" src="CV_opcion_1_clasica_elegante_vector.svg" alt="Cindy &amp; Víctor">
+    <h1>Cámara desechable</h1>
+    <p id="revealLabel">Tus fotos se revelan después de la boda</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-view="camara">Cámara</button>
+    <button class="tab" data-view="galeria">Galería</button>
+  </div>
+
+  <!-- CAMARA -->
+  <section class="view active" id="view-camara">
+
+    <div class="card" id="nameGate">
+      <h2 style="font-size:1.1rem;color:var(--d)">¿Cómo te llamas?</h2>
+      <p>Así sabremos de quién es cada rollo cuando se revelen las fotos.</p>
+      <input type="text" id="nameInput" placeholder="Tu nombre" autocomplete="off">
+      <button class="btn" id="startBtn" type="button">Empezar a capturar</button>
+    </div>
+
+    <div id="camWrap" style="display:none">
+      <div class="cam-shell back" id="camShell">
+        <video id="camVideo" autoplay playsinline muted></video>
+        <div class="flash-overlay" id="flashOverlay"></div>
+        <div class="counter-badge" id="counterBadge">15/15</div>
+      </div>
+      <div class="cam-controls">
+        <button class="icon-btn" id="switchBtn" type="button" aria-label="Cambiar cámara">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 7h3l1.5-2h7L17 7h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="13" r="3.4" stroke="currentColor" stroke-width="1.6"/></svg>
+        </button>
+        <button class="shutter" id="shutterBtn" type="button" aria-label="Tomar foto"></button>
+        <button class="icon-btn" id="flashBtn" type="button" aria-label="Flash">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <p class="cam-hint" id="camHint">Se te permiten 15 fotos — ¡elige bien el momento!</p>
+    </div>
+
+    <div class="card" id="camError" style="display:none">
+      <h2 style="font-size:1.05rem;color:var(--d)">No pudimos abrir tu cámara</h2>
+      <p>Por favor permite el acceso a la cámara en tu navegador y recarga esta página.</p>
+    </div>
+
+    <div class="card" id="filmDone" style="display:none">
+      <h2 style="font-size:1.1rem;color:var(--d)">¡Carrete lleno!</h2>
+      <p>Gracias por capturar momentos de nuestra boda. Tus fotos se mantendrán en secreto hasta el revelado.</p>
+    </div>
+
+  </section>
+
+  <!-- GALERIA -->
+  <section class="view" id="view-galeria">
+    <div class="card" id="galleryLocked">
+      <h2 style="font-size:1.1rem;color:var(--d)">Las fotos siguen en secreto</h2>
+      <p>Todas las fotos de todos los invitados se revelan juntas el:</p>
+      <div class="countdown-box" id="galleryCountdown">—</div>
+    </div>
+    <div id="galleryRevealed" style="display:none">
+      <div id="galleryContent"></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+
+var PHOTO_API_URL = 'PEGA_AQUI_LA_URL_DEL_WEB_APP_PHOTO_BOOTH_API';
+var MAX_SHOTS = 15;
+var REVEAL_AT = new Date('2027-01-17T12:00:00-06:00');
+
+/* ---------- helpers ---------- */
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function uid(){
+  if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return 'r'+Date.now().toString(36)+Math.random().toString(36).slice(2,10);
+}
+function apiConfigured(){ return PHOTO_API_URL.indexOf('PEGA_AQUI') === -1; }
+function apiGet(params){
+  var q = Object.keys(params||{}).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);}).join('&');
+  return fetch(PHOTO_API_URL + '?' + q).then(function(r){return r.json();});
+}
+function apiPost(params){
+  var body = new URLSearchParams(params);
+  return fetch(PHOTO_API_URL, {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: body.toString()})
+    .then(function(r){return r.text();}).then(function(t){ try{return JSON.parse(t);}catch(e){return {ok:false, raw:t};} });
+}
+
+/* ---------- tabs ---------- */
+Array.from(document.querySelectorAll('.tab')).forEach(function(btn){
+  btn.addEventListener('click', function(){
+    Array.from(document.querySelectorAll('.tab')).forEach(function(b){b.classList.remove('active');});
+    Array.from(document.querySelectorAll('.view')).forEach(function(v){v.classList.remove('active');});
+    btn.classList.add('active');
+    document.getElementById('view-'+btn.getAttribute('data-view')).classList.add('active');
+    if(btn.getAttribute('data-view')==='galeria') loadGallery();
+  });
+});
+
+/* ---------- reveal label ---------- */
+document.getElementById('revealLabel').textContent =
+  'Tus fotos se revelan el ' + REVEAL_AT.toLocaleDateString('es-MX',{day:'numeric',month:'long'}) + ' a las ' +
+  REVEAL_AT.toLocaleTimeString('es-MX',{hour:'numeric',minute:'2-digit'});
+
+/* ====================== CAMARA ====================== */
+var rollId = localStorage.getItem('rollId') || '';
+var rollName = localStorage.getItem('rollName') || '';
+var remaining = MAX_SHOTS;
+var stream = null, facing = 'environment';
+
+var nameGate=document.getElementById('nameGate'), camWrap=document.getElementById('camWrap'),
+    camError=document.getElementById('camError'), filmDone=document.getElementById('filmDone'),
+    camVideo=document.getElementById('camVideo'), camShell=document.getElementById('camShell'),
+    counterBadge=document.getElementById('counterBadge'), flashOverlay=document.getElementById('flashOverlay'),
+    shutterBtn=document.getElementById('shutterBtn'), switchBtn=document.getElementById('switchBtn'),
+    flashBtn=document.getElementById('flashBtn'), camHint=document.getElementById('camHint');
+
+if(rollId && rollName){ beginCamera(); }
+
+document.getElementById('startBtn').addEventListener('click', function(){
+  var name = document.getElementById('nameInput').value.trim();
+  if(!name){ document.getElementById('nameInput').focus(); return; }
+  rollName = name.slice(0,40);
+  rollId = rollId || uid();
+  localStorage.setItem('rollId', rollId);
+  localStorage.setItem('rollName', rollName);
+  beginCamera();
+});
+
+function beginCamera(){
+  nameGate.style.display='none';
+  if(apiConfigured()){
+    apiGet({action:'count', rollId:rollId}).then(function(res){
+      remaining = (res && typeof res.remaining==='number') ? res.remaining : MAX_SHOTS;
+      afterCount();
+    }).catch(function(){ afterCount(); });
+  } else { afterCount(); }
+}
+function afterCount(){
+  if(remaining<=0){ showFilmDone(); return; }
+  updateCounter();
+  openCamera(facing);
+}
+function updateCounter(){ counterBadge.textContent = remaining + '/' + MAX_SHOTS; }
+function showFilmDone(){ camWrap.style.display='none'; filmDone.style.display='block'; stopStream(); }
+
+function stopStream(){ if(stream){ stream.getTracks().forEach(function(t){t.stop();}); stream=null; } }
+
+function openCamera(mode){
+  stopStream();
+  navigator.mediaDevices.getUserMedia({ video:{ facingMode: mode }, audio:false }).then(function(s){
+    stream = s;
+    camVideo.srcObject = s;
+    camShell.classList.toggle('back', mode==='environment');
+    camWrap.style.display='block';
+  }).catch(function(){
+    camError.style.display='block';
+  });
+}
+
+switchBtn.addEventListener('click', function(){
+  facing = facing==='environment' ? 'user' : 'environment';
+  openCamera(facing);
+});
+
+flashBtn.addEventListener('click', function(){
+  if(!stream) return;
+  var track = stream.getVideoTracks()[0];
+  if(track && track.getCapabilities && track.getCapabilities().torch){
+    var torchOn = flashBtn.getAttribute('data-on')==='1';
+    track.applyConstraints({advanced:[{torch:!torchOn}]}).then(function(){
+      flashBtn.setAttribute('data-on', torchOn?'0':'1');
+    }).catch(function(){});
+  }
+});
+
+shutterBtn.addEventListener('click', function(){
+  if(remaining<=0 || !stream) return;
+  shutterBtn.disabled = true;
+  flashOverlay.classList.remove('go'); void flashOverlay.offsetWidth; flashOverlay.classList.add('go');
+  if(navigator.vibrate) navigator.vibrate(25);
+
+  var canvas = document.createElement('canvas');
+  var maxW = 1280;
+  var vw = camVideo.videoWidth || 720, vh = camVideo.videoHeight || 960;
+  var scale = Math.min(1, maxW / vw);
+  canvas.width = vw*scale; canvas.height = vh*scale;
+  var ctx = canvas.getContext('2d');
+  if(facing==='user'){ ctx.translate(canvas.width,0); ctx.scale(-1,1); }
+  ctx.drawImage(camVideo, 0, 0, canvas.width, canvas.height);
+  var dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+
+  if(!apiConfigured()){
+    remaining--; updateCounter(); shutterBtn.disabled=false;
+    if(remaining<=0) showFilmDone();
+    return;
+  }
+  apiPost({action:'upload', rollId:rollId, rollName:rollName, data:dataUrl}).then(function(res){
+    shutterBtn.disabled = false;
+    if(res && res.ok){
+      remaining = res.remaining;
+      updateCounter();
+      if(remaining<=0) showFilmDone();
+    } else if(res && res.error==='limite_alcanzado'){
+      remaining = 0; showFilmDone();
+    } else {
+      camHint.textContent = 'No se pudo guardar esa foto, intenta de nuevo.';
+    }
+  }).catch(function(){
+    shutterBtn.disabled = false;
+    camHint.textContent = 'Sin conexión — intenta de nuevo.';
+  });
+});
+
+/* ====================== GALERIA ====================== */
+var galleryLoaded = false;
+function loadGallery(){
+  if(galleryLoaded) return;
+  var countdownBox = document.getElementById('galleryCountdown');
+  var now = new Date();
+  if(now < REVEAL_AT){
+    countdownBox.textContent = REVEAL_AT.toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'}) +
+      ' · ' + REVEAL_AT.toLocaleTimeString('es-MX',{hour:'numeric',minute:'2-digit'});
+    return;
+  }
+  if(!apiConfigured()){
+    document.getElementById('galleryLocked').innerHTML = '<p>La galería aún no está configurada.</p>';
+    return;
+  }
+  galleryLoaded = true;
+  apiGet({action:'gallery'}).then(function(res){
+    if(!res || !res.revealed){
+      var countdownBox2 = document.getElementById('galleryCountdown');
+      countdownBox2.textContent = res && res.revealAt ? new Date(res.revealAt).toLocaleString('es-MX') : '—';
+      galleryLoaded = false;
+      return;
+    }
+    document.getElementById('galleryLocked').style.display='none';
+    document.getElementById('galleryRevealed').style.display='block';
+    renderGallery(res.photos || []);
+  }).catch(function(){ galleryLoaded = false; });
+}
+function renderGallery(photos){
+  var el = document.getElementById('galleryContent');
+  if(!photos.length){ el.innerHTML = '<div class="empty-note">Todavía no hay fotos.</div>'; return; }
+  var html = '<div class="section-label">Fotos reveladas · ' + photos.length + '</div><div class="gallery-grid">';
+  photos.forEach(function(p, i){
+    html += '<div class="gallery-item" style="animation-delay:' + (i*0.04) + 's">' +
+      '<img src="' + esc(p.url) + '" loading="lazy" alt="Foto de ' + esc(p.name) + '">' +
+      '<div class="tag">' + esc(p.name) + '</div></div>';
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+})();
+</script>
+</body>
+</html>
