@@ -15,23 +15,12 @@ Continuar el desarrollo y publicación de la invitación digital de boda de **Ci
   - Es un "sitio adicional" (multisite) dentro del mismo proyecto `cv26-f99e2`, creado para tener un link más bonito/personalizado que el nombre del proyecto.
   - Vinculado mediante un hosting *target* llamado `invitacion` (ver `.firebaserc` local del usuario, no versionado en este repo).
 - URL original del proyecto (sigue activa, no se usa para compartir): `https://cv26-f99e2.web.app`
-- El despliegue se hace manualmente desde PowerShell, en la carpeta local del usuario (Escritorio) donde vive `firebase.json`:
-  1. descargar los archivos actualizados desde GitHub (raw.githubusercontent.com) hacia `Desktop/public/` — ver "Checklist obligatorio antes de cada deploy" abajo, NO usar "Guardar como" del navegador porque puede fallar silenciosamente (nombre/extensión incorrectos, o guarda una copia vieja del caché del navegador).
-  2. ejecutar `firebase deploy --only hosting:invitacion` (nota: ya NO es `firebase deploy --only hosting` a secas, porque `firebase.json` ahora tiene `"target": "invitacion"` en vez de apuntar al sitio default)
+- **El despliegue ahora es automático (desde el 27/nov/2026).** `firebase.json` y `.firebaserc` viven versionados en este repo (antes solo existían en el Escritorio del usuario). Un GitHub Action (`.github/workflows/firebase-deploy.yml`) se dispara en cada push a `main` y publica directo a `hosting:invitacion` usando `FirebaseExtended/action-hosting-deploy`. El usuario ya **no necesita PowerShell ni descargar archivos manualmente** — en cuanto Claude fusiona un cambio a `main`, el Action lo despliega solo en unos 1-2 minutos. Se puede ver el progreso/resultado de cada despliegue en la pestaña "Actions" del repositorio en GitHub.
+  - Requiere el secret de repo `FIREBASE_SERVICE_ACCOUNT_CV26` (una cuenta de servicio de Firebase) — ver sección "Configuración pendiente" si aún no existe.
+  - El incidente histórico de contenido viejo servido (14/sep/2026) era por descargas manuales fallidas a `Desktop\public\`; con el deploy automático ese modo de falla ya no aplica — el Action siempre construye desde el commit exacto que se fusionó a `main`.
 
-### Checklist obligatorio antes de cada deploy (evita el incidente del 14/sep/2026)
-El 14 de septiembre de 2026 se perdieron ~3 horas depurando por qué `cindyvictor2027.web.app` mostraba contenido viejísimo (una maqueta con "CEREMONIA — PARROQUIA SAN AGUSTÍN" que nunca existió en el sitio real) a pesar de deploys "exitosos" y de probar en 2 navegadores, modo incógnito, y datos móviles. La causa real: `Desktop\public\index.html` y `Desktop\public\CV2026.jpeg` llevaban 3 días sin actualizarse (una descarga manual anterior falló silenciosamente) y cada deploy simplemente resubía ese archivo viejo una y otra vez — Firebase nunca tuvo la culpa. Para no repetirlo, antes de CUALQUIER `firebase deploy`, correr en PowerShell parado en `Desktop\public`:
-
-```powershell
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Cindy-V-ctor/main/index.html" -OutFile "index.html"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Cindy-V-ctor/main/CV2026.jpeg" -OutFile "CV2026.jpeg"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Cindy-V-ctor/main/intro-cv.mp4" -OutFile "intro-cv.mp4"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Cindy-V-ctor/main/admin.html" -OutFile "admin.html"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/victormejia-ship-it/Cindy-V-ctor/main/camara.html" -OutFile "camara.html"
-Get-Item index.html, CV2026.jpeg, intro-cv.mp4, admin.html, camara.html | Select-Object Name, Length, LastWriteTime
-```
-
-Confirmar que `LastWriteTime` sea de HOY (no de días atrás) antes de desplegar. Usar `Invoke-WebRequest` en vez de "Guardar como" del navegador porque es determinista y no depende de dónde el navegador decida guardar el archivo ni de qué caché use.
+### Configuración pendiente (una sola vez, por el dueño del proyecto)
+Para que el GitHub Action pueda publicar, falta crear el secret `FIREBASE_SERVICE_ACCOUNT_CV26` en GitHub (Settings → Secrets and variables → Actions → New repository secret), con el contenido de una clave de cuenta de servicio generada en Firebase Console (Configuración del proyecto → Cuentas de servicio → Generar nueva clave privada). Todo por navegador, sin terminal. Mientras no exista ese secret, el Action fallará (se puede ver el error en la pestaña "Actions") y no hay fallback automático a PowerShell — si urge publicar algo antes de configurarlo, se puede volver al flujo manual anterior (`firebase deploy --only hosting:invitacion` desde el Escritorio).
 
 ## Arquitectura actual
 - Frontend: HTML/CSS/JS estático.
@@ -153,7 +142,7 @@ Actividad para invitados inspirada en la app "Reveal": cada invitado toma hasta 
 - Agregar `camara.html` al checklist de descarga antes de cada deploy (ver abajo).
 
 ## Pendientes
-- **Automatizar despliegue GitHub → Firebase Hosting.** Hoy el flujo es manual (PowerShell: descargar `index.html` desde GitHub a `Desktop/public/index.html` y ejecutar `firebase deploy --only hosting:invitacion`), por lo que los cambios en `main` no se publican solos. Opción recomendada: GitHub Action con el plugin oficial `FirebaseExtended/action-hosting-deploy`, disparado en cada push a `main`, usando un service account de Firebase guardado como secret del repo (`FIREBASE_SERVICE_ACCOUNT_CV26` o similar). Requiere que el dueño del proyecto genere y suba esa credencial a GitHub Secrets — no se puede automatizar sin ese paso manual inicial.
+- **Despliegue automatizado:** ya implementado vía GitHub Action (ver sección "Hosting actual"). Solo falta que el usuario cree el secret `FIREBASE_SERVICE_ACCOUNT_CV26` una sola vez para que funcione.
 - Mover invitaciones a Firestore (ver sección "Invitados / personalización").
 - Integrar el RSVP real a Firestore.
 
