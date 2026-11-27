@@ -78,6 +78,7 @@ function doGet(e) {
       photos.push({
         name: rollName,
         url: 'https://drive.google.com/uc?export=view&id=' + f.getId(),
+        downloadUrl: 'https://drive.google.com/uc?export=download&id=' + f.getId(),
         ts: f.getDateCreated().getTime()
       });
     }
